@@ -1,10 +1,5 @@
 # Game Engine
 
-![](https://img.shields.io/badge/Build-passing-brightgreen) ![https://www.libsdl.org](https://img.shields.io/badge/SDL_version-SDL2-blue) ![License](https://img.shields.io/github/license/unpwnabl/Game-Engine)
-A game engine written in C++ with [SDL2](https://www.libsdl.org), including SDL2_ttf. 
-
-![](/imgs/screenshot.png)
-
 ## Structure
 
 - Core
@@ -72,7 +67,3 @@ Uses the [ANSI escape code sequence](https://en.wikipedia.org/wiki/ANSI_escape_c
 #### Colors <a name="colors"></a>
 
 Uses `SDL_Color` to define colors. Every color has members accessible such as `C_WHITE.r`, `C_WHITE.g`, `C_WHITE.b` and `C_WHITE.a`. Alpha is by default set at 255.
-
-## License
-This project is licensed under the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html)
-
