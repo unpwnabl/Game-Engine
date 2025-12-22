@@ -1,22 +1,30 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 
 #include "vars.hpp"
-#include "../../core/misc/include/error.hpp"
+#include "../../core/misc/include/log.hpp"
 #include "../../core/misc/include/colors.h"
 #include "../../core/misc/include/fps.h"
 #include "../../core/ui/include/window.h"
 #include "../../core/ui/include/renderer.h"
 #include "../../core/ui/include/text.h"
 #include "../../core/ui/include/font_paths.hpp"
+#include "../../core/ui/include/image.h"
 
 bool gameloop = true;
 
 int main() {
+	system("clear");
+	std::cout << "\033[0;90m<================================Starting debug===============================>" << "\033[0m" << std::endl;
+
+	success("Application started");
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		error("game.cpp > Couldn't initialize SDL: ");
 	}
@@ -29,6 +37,8 @@ int main() {
 	// Initialize text management
 	init_ttf();
 	TTF_Font *roboto = TTF_OpenFont(roboto_path, 10);
+
+	Image test(renderer, "imgs/test.png", 100, 100);
 
 	while (gameloop) {
 		// Start counting ticks
@@ -56,6 +66,8 @@ int main() {
 
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
+
+		test.render(renderer, 100, 100);
 		
 		cap(start, MAX_FPS, 1, renderer, roboto);
 	

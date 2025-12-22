@@ -1,14 +1,14 @@
 #include <SDL2/SDL.h>
-#include "../../misc/include/error.hpp"
+#include "../../misc/include/log.hpp"
 #include "include/window.h"
 
 void create_window(SDL_Window*& window, const char* title, int x, int y, int width, int height) {
 	window = SDL_CreateWindow(title, x, y, width, height, SDL_WINDOW_SHOWN);
 
 	if (!window) {
-		error("window.cpp > Window couldn't be created");
+		sdl_error("window.cpp > Window couldn't be created");
 	}
-	success("Window has been created");
+	message("Window has been created");
 	SDL_SetWindowResizable(window, SDL_FALSE);
 }
 

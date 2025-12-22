@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 #include "../../platform/linux/vars.hpp"
-#include "../misc/include/error.hpp"
+#include "../misc/include/log.hpp"
 #include "../misc/include/colors.h"
 #include "../misc/include/split.hpp"
 #include "include/text.h"
@@ -21,19 +21,19 @@ void init_ttf() {
 	if (!test_f) {
 		std::string msg_s = "font.cpp > Couldn't load font from \"" + std::string(roboto_path) + "\"";
 		const char* msg = msg_s.c_str();
-		error(msg);
+		sdl_error(msg);
 	}
-	success("Dummy font loaded, unloading now...");
+	message("Dummy font loaded, unloading now...");
 	TTF_CloseFont(test_f);
 	test_f = NULL;
-	success("Dummy font unloaded");
+	message("Dummy font unloaded");
 }
 
 void generate_text(SDL_Renderer* renderer, const char* s, TTF_Font* font, int x, int y, int scale, SDL_Color fore) {
 	TTF_SetFontSize(font, scale);
 	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, s, fore);
 	if (!surface) {
-		error("text.cpp > Couldn't create surface for text");
+		sdl_error("text.cpp > Couldn't create surface for text");
 	}
 	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 	// Use rectangle to display text inside
@@ -64,5 +64,5 @@ void render_text(SDL_Renderer* renderer, const char* s, TTF_Font *font, int x, i
 
 void close_ttf() {
 	TTF_Quit();
-	success("Closed TTF");
+	message("Closed TTF");
 }

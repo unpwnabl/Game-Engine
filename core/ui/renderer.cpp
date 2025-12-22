@@ -1,15 +1,15 @@
 #include <SDL2/SDL.h>
 
-#include "../../misc/include/error.hpp"
+#include "../../misc/include/log.hpp"
 #include "../../misc/include/colors.h"
 #include "include/renderer.h"
 
 void create_renderer(SDL_Window* window, SDL_Renderer*& renderer) {
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 	if (!renderer) {
-		error("renderer.cpp > Renderer couldn't be created");
+		sdl_error("renderer.cpp > Renderer couldn't be created");
 	}
-	success("Renderer has been created");
+	message("Renderer has been created");
 	// Set background to black
 	SDL_SetRenderDrawColor(renderer, C_BLACK.r, C_BLACK.g, C_BLACK.b, C_BLACK.a);
 	SDL_RenderClear(renderer);

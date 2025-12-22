@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <cstdlib>
-#include "include/error.hpp"
+#include "include/log.hpp"
 
 /* 
  *  Using ANSI color code to display colored messages:
@@ -28,8 +28,13 @@
  *  m		End escape code
  */
 
+void sdl_error(const char* s) {
+	std::cout << "\033[4;31m[✗] " << s << ": " << SDL_GetError() << "\033[0m" << std::endl;
+	exit(EXIT_FAILURE);
+}
+
 void error(const char* s) {
-	std::cout << "\033[4;31m[X] " << s << ": " << SDL_GetError() << "\033[0m" << std::endl;
+	std::cout << "\033[4;31m[✗] " << s << "\033[0m" << std::endl;
 	exit(EXIT_FAILURE);
 }
 
@@ -39,4 +44,8 @@ void warning(const char* s) {
 
 void success(const char* s) {
 	std::cout << "\033[0;32m[✓] " << s << "\033[0m" << std::endl;
+}
+
+void message(const char* s) {
+	std::cout << "\033[0;90m[.] " << s << "\033[0m" << std::endl;
 }
