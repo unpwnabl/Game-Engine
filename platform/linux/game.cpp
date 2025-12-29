@@ -37,8 +37,9 @@ int main() {
 	init_ttf();
 	TTF_Font *roboto = TTF_OpenFont(roboto_path, 10);
 
-	Image test(renderer, "imgs/test.png", 100, 100);
-	Image test2(renderer, "imgs/test.png", 100, 100);
+	Image test(renderer, "imgs/test.png", 100, 100, 100, 100);
+	Image test2(renderer, "imgs/test.png", 120, 120, 100, 100);
+	test.set_color(C_WHITE);
 	test2.set_color(C_RED);
 
 	while (gameloop) {
@@ -68,9 +69,8 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
-		test2.render(120, 120);
-		test.render(100, 100);
-		test.rotate(1.0 * delta_time);
+		test2.render();
+		test.render();
 
 		cap(start, MAX_FPS, 1, renderer, roboto);
 	
