@@ -28,6 +28,10 @@
  *  m		End escape code
  */
 
+void debug_b() {
+	std::cout << "\033[0;90m<==================================Starting debug==============================>\033[0m" << std::endl;
+}
+
 void sdl_error(const char* s) {
 	std::cout << "\033[4;31m[✗] " << s << ": " << SDL_GetError() << "\033[0m" << std::endl;
 	exit(EXIT_FAILURE);

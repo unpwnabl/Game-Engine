@@ -4,11 +4,11 @@ project(GameEngine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES platform/linux/game.cpp core/ui/window.cpp core/ui/renderer.cpp core/ui/text.cpp core/ui/font_paths.cpp core/ui/image.cpp core/misc/log.cpp core/misc/colors.cpp core/misc/split.cpp core/misc/fps.cpp)
+set(SOURCES platform/linux/game.cpp core/ui/window.cpp core/ui/renderer.cpp core/ui/text.cpp core/ui/font_paths.cpp src/2d/image.cpp core/misc/log.cpp core/misc/colors.cpp core/misc/split.cpp core/misc/fps.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE core/ui/include core/misc/include PRIVATE platform/linux)
+target_include_directories(${PROJECT_NAME} PRIVATE core/ui/include core/misc/include PRIVATE platform/linux PRIVATE src/2d/include PRIVATE src/3d/include)
 
 # Imposes SDL2 as required
 find_package(SDL2 REQUIRED)

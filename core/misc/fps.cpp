@@ -7,7 +7,14 @@
 #include "include/fps.h"
 #include "../ui/include/text.h"
 
-void cap(Uint64 start, int max, int show, SDL_Renderer* renderer, TTF_Font* font) {
+Uint32 delta_time;
+
+Uint32 calculate_time(Uint64 start) {
+	return ((Uint32)(SDL_GetTicks() - start));
+}
+
+void cap (Uint64 start, int max, int show, SDL_Renderer* renderer, TTF_Font* font) {
+	delta_time = calculate_time(start);
 	if ((1000 / max) > (SDL_GetTicks() - start)) {
 		SDL_Delay((1000 / max) - (SDL_GetTicks() - start));
 	}
