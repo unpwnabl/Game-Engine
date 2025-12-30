@@ -1,5 +1,6 @@
 
 
+
 # Game Engine
 
 ## Structure
@@ -17,6 +18,9 @@
 	- [Source](#src)
 		- [2D](#2d)
 			- [Image](#image)
+			- [Vector2D](#vect2d)
+		- [3D](#3d)
+			- [Vector3D](#vect3d)
 	- Audio
 	- Images 
 - Platform
@@ -66,7 +70,7 @@ The source directory has every component tied to the game engine itself.
 Then, the following data fields are accessible:
 
 - `int x`: X position.
-- `int y` Y position.
+- `int y`: Y position.
 - `int w`: width of image.
 - `int h`: height of image.
 - `SDL_Point center`: a point indicating the center of the texture.
@@ -81,6 +85,104 @@ And the following methods too:
 - `void Image::scale(double factor)`: scale the image size using a factor.
 - `void Image::reflect()`: reflects the image along the Y axis.
 
+#### Vector2D <a name="vect2d"></a>
+
+`Vector2D` is a class that defines bidimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
+- `Vector2D::Vector2D()`: creates a `Vector2D(0.0, 0.0)`
+- `Vector2D::Vector2D(double x, double y)`: instantiates a new `Vector2D` object with `(x,y)`. 
+	- **Returns**: `Vector2D(x, y)`
+
+Then, the following data fields are accessible:
+
+- `double x`: X position.
+- `double y`: Y position.
+
+The following operators:
+
+- `operator+(const Vector2D&, const Vector2D&)`: returns the sum of two vectors.
+	- **Returns**: `Vector2D(x1 + x2, y1 + y2)`
+- `operator-(const Vector2D&, const Vector2D&)`: returns the subtraction of two vectors.
+	- **Returns**: `Vector2D(x1 + (-x2), y1 + (-y2))`
+- `operator*(const Vector2D&, const double)`: returns the vector multiplied by a scalar.
+	- **Returns**: `Vector2D(x * double, y * double)`
+- `operator==(const Vector2D&, const Vector2D&)`
+	- **Returns**:	**true** if `x1 == x2` and `y1 == y2`
+								else **false**
+- `operator!=(const Vector2D&, const Vector2D&)`
+	- **Returns**:	**true** if `x1 != x2` or `y1 != y2`
+								else **false**
+- `operator<(const Vector2D&, const Vector2D&)`
+	- **Returns**:	**true** if `x1 < x2` and `y1 < y2`
+								else **false**
+- `operator>(const Vector2D&, const Vector2D&)`
+	- **Returns**:	**true** if `x1 > x2` and `y1 > y2`
+								else **false**
+- `operator<<(std::ostream&, const Vector2D&)`
+	- **Returns**:	a `std::ostream&` object to print out.
+
+And the following methods too:
+
+- `double Vector2D::magnitude()`: returns the magnitude of the vector using the Pythagorean theorem.
+	- **Returns**: `double`
+- `Vector2D to_vect2d(const Vector3D&)`: transforms a Vector3D object to a Vector2D one.
+	- **Returns**: `Vector2D`
+- `double dot2d(const Vector2D&, const Vector2D&)`: returns the dot product of two vectors as a scalar.
+	- **Returns**: scalar as `double`
+- `double angle2d(const Vector2D&, const Vector2D&)`: returns the angle between two vectors in degrees.
+	- **Returns**: angle in degrees as `double`
+
+#### 3D <a name="3d"></a>
+
+3D graphics and utilities are here. 
+
+#### Vector3D <a name="vect3d"></a>
+
+`Vector3D` is a class that defines tridimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
+- `Vector3D::Vector3D()`: creates a `Vector3D(0.0, 0.0, 0.0)`
+- `Vector3D::Vector3D(double x, double y, double z)`: instantiates a new `Vector3D` object with `(x,y,z)`. 
+	- **Returns**: `Vector3D(x, y, z)`
+
+Then, the following data fields are accessible:
+
+- `double x`: X position.
+- `double y`:Y position.
+- `double z`: Z position.
+
+The following operators:
+
+- `operator+(const Vector3D&, const Vector3D&)`: returns the sum of two vectors.
+	- **Returns**: `Vector3D(x1 + x2, y1 + y2, z1 + z2)`
+- `operator-(const Vector3D&, const Vector3D&)`: returns the subtraction of two vectors.
+	- **Returns**: `Vector3D(x1 + (-x2), y1 + (-y2), z1 + (-z2))`
+- `operator*(const Vector3D&, const double)`: returns the vector multiplied by a scalar.
+	- **Returns**: `Vector3D(x * scalar, y * scalar, z * scalar)`
+- `operator==(const Vector3D&, const Vector3D&)`
+	- **Returns**:	**true** if `x1 == x2`, `y1 == y2` and `z1 == z2`
+								else **false**
+- `operator!=(const Vector3D&, const Vector3D&)`
+	- **Returns**:	**true** if `x1 != x2`, `y1 != y2` or `z1 != z2`
+								else **false**
+- `operator<(const Vector3D&, const Vector3D&)`
+	- **Returns**:	**true** if `x1 < x2`, `y1 < y2` and `z1 < z2`
+								else **false**
+- `operator>(const Vector3D&, const Vector3D&)`
+	- **Returns**:	**true** if `x1 > x2`, `y1 > y2` and `z1 > z2`
+								else **false**
+- `operator<<(std::ostream& const Vector3D&)`
+	- **Returns**:	a `std::ostream&` object to print out.
+
+And the following methods too:
+
+- `double Vector3D::magnitude()`: returns the magnitude of the vector using the Pythagorean theorem.
+	- **Returns**: `double`
+- `Vector3D to_vect3d(const Vector2D&)`: transforms a Vector2D object to a Vector3D one.
+	- **Returns**: `Vector3D`
+- `double dot3d(const Vector3D&, const Vector3D&)`: returns the dot product of two vectors as a scalar.
+	- **Returns**: scalar as `double`
+- `Vector3D cross3d(const Vector3D&, const Vector3D&)`: returns the cross product of two vectors as vector.
+	- **Returns**: cross product as `Vector3D`
+- `double angle3d(const Vector3D&, const Vector3D&)`: returns the angle between two vectors in degrees.
+	- **Returns**: angle in degrees as `double`
 
 ### Misc <a name="misc"></a>
 
@@ -111,5 +213,6 @@ Uses the [ANSI escape code sequence](https://en.wikipedia.org/wiki/ANSI_escape_c
 
 Uses `SDL_Color` to define colors. </br>
 Every color is RGBA, with  `Uint8 C_WHITE.r`, `Uint8 C_WHITE.g`, `Uint8 C_WHITE.b` and `Uint8 C_WHITE.a`. Alpha is by default set at 255.
+
 
 
