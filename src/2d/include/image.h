@@ -3,6 +3,8 @@
 
 #include <SDL2/SDL.h>
 
+void init_img(int flags);
+
 class Image {
 	private:
 		const char* path;
@@ -24,5 +26,7 @@ class Image {
 
 		~Image();
 };
+
+void close_img();
 
 #endif

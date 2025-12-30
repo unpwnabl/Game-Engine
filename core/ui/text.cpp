@@ -1,11 +1,12 @@
+// Thirdparty
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-
+// C++
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <cstdlib>
-
+// Game engine
 #include "../../platform/linux/vars.hpp"
 #include "../misc/include/log.hpp"
 #include "../misc/include/colors.h"
@@ -17,6 +18,7 @@ void init_ttf() {
 	if (TTF_Init() < 0) {
 		error("font.cpp > Couldn't start SDL_TTF");
 	}
+	message("SDL_ttf initialized successfully");
 	TTF_Font *test_f = TTF_OpenFont(roboto_path, 10);
 	if (!test_f) {
 		std::string msg_s = "font.cpp > Couldn't load font from \"" + std::string(roboto_path) + "\"";
@@ -26,7 +28,6 @@ void init_ttf() {
 	message("Dummy font loaded, unloading now...");
 	TTF_CloseFont(test_f);
 	test_f = NULL;
-	message("Dummy font unloaded");
 }
 
 void generate_text(SDL_Renderer* renderer, const char* s, TTF_Font* font, int x, int y, int scale, SDL_Color fore) {
@@ -64,5 +65,5 @@ void render_text(SDL_Renderer* renderer, const char* s, TTF_Font *font, int x, i
 
 void close_ttf() {
 	TTF_Quit();
-	message("Closed TTF");
+	message("SDL_ttf closed");
 }

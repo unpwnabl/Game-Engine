@@ -8,6 +8,13 @@
 #include "../../core/misc/include/colors.h"
 #include "include/image.h"
 
+void init_img(int flags) {
+	if (IMG_Init(flags) == 0) {
+		sdl_error("image.cpp > Couldn't initialize SDL_Image");
+	}
+	message("SDL_image initialized successfully");
+}
+
 Image::Image() {
 	error("image.cpp > Please provide correct syntax for Image object. Refer to wiki.md");
 };
@@ -46,4 +53,9 @@ Image::~Image() {
 	texture = NULL;
 	std::string msg = "Removed image \"" + std::string(path) + "\" from memory";
 	message(msg.c_str());
+}
+
+void close_img() {
+	IMG_Quit();
+	message("SDL_image closed");
 }

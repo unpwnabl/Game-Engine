@@ -1,12 +1,14 @@
+// Thirdparty
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-
+#include <SDL2/SDL_image.h>
+// C++
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdlib>
 #include <unistd.h>
-
+// Game Engine
 #include "vars.hpp"
 #include "../../core/misc/include/log.hpp"
 #include "../../core/misc/include/colors.h"
@@ -16,6 +18,8 @@
 #include "../../core/ui/include/text.h"
 #include "../../core/ui/include/font_paths.hpp"
 #include "../../src/2d/include/image.h"
+#include "../../src/2d/include/vector2d.hpp"
+#include "../../src/3d/include/vector3d.hpp"
 
 bool gameloop = true;
 
@@ -33,12 +37,14 @@ int main() {
 	// Create the renderer
 	SDL_Renderer *renderer;
 	create_renderer(window, renderer);
-	// Initialize text management
+	// Initialize text manager
 	init_ttf();
 	TTF_Font *roboto = TTF_OpenFont(roboto_path, 10);
+	// Initialize image manager
+	init_img(IMG_INIT_PNG);
 
 	Image test(renderer, "imgs/test.png", 100, 100, 100, 100);
-	Image test2(renderer, "imgs/test.png", 120, 120, 100, 100);
+	Image test2(renderer, "imgs/test.png", 200, 100, 100, 100);
 	test.set_color(C_WHITE);
 	test2.set_color(C_RED);
 
@@ -81,6 +87,7 @@ int main() {
 	// End program while cleaning memory
 	TTF_CloseFont(roboto);
 	close_ttf();
+	close_img();
 	destroy_renderer(renderer);
 	destroy_window(window);
 
