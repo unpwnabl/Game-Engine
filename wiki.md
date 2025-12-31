@@ -1,6 +1,3 @@
-
-
-
 # Game Engine
 
 ## Structure
@@ -16,6 +13,8 @@
 		- [Log](#log)
 		- [Colors](#colors)
 	- [Source](#src)
+		- [Miscellaneous](#misc_src)
+			- [Resource Manager](#rm)
 		- [2D](#2d)
 			- [Image](#image)
 			- [Vector2D](#vect2d)
@@ -55,13 +54,23 @@ Everything concerning the User Interface such as the creation/destruction of win
 
 The source directory has every component tied to the game engine itself.
 
+
+#### Miscellaneous <a name="misc_src"></a>
+
+#### Resource Manager <a name="rm"></a>
+
+Each time an image is created, we use the resource manager to efficiently load into memory the appropriate texture by checking an [unordered map](https://en.cppreference.com/w/cpp/container/unordered_map.html), which key is the file path. If found, it returns the texture, otherwise it's created from scratch and then added to the map.
+- `SDL_Texture* get_texture(SDL_Renderer* renderer, const char* path)`: returns the texture if found, otherwise creates a new one.
+	- **Returns**: appropriate `SDL_Texture*`
+- `void remove_texture()`: removes a texture from the map. 
+
 #### 2D <a name="2d"></a>
 
 2D graphics and utilities are here. 
 
 #### Image <a name="image"></a>
 
-`Image` is the class that defines all images rendered onto the window. Each one can be created as such:
+`Image` is the class that defines all images rendered onto the window. Every time a image is created, it uses a resource manager to see if it was already loaded into memory. If it's the first instance, it is added, otherwise it's loaded as-is. Each one can be created as such:
 - `Image::Image()`: incorrect usage of Image object creation.
 	- **Returns**: `EXIT_FAILURE`
 - `Image::Image(SDL_Renderer *renderer, const char* image_path, int width, int height)`: instantiates a new Image object onto a given `render`, with the file located in `image_path` (all images are stored into `core/imgs`, a folder then copied into the build directory). By default, `width` and `height` are set to the original image size, but if provided, the image is scaled accordingly.
@@ -87,7 +96,7 @@ And the following methods too:
 
 #### Vector2D <a name="vect2d"></a>
 
-`Vector2D` is a class that defines bidimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
+`Vector2D` is a class that defines bi-dimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
 - `Vector2D::Vector2D()`: creates a `Vector2D(0.0, 0.0)`
 - `Vector2D::Vector2D(double x, double y)`: instantiates a new `Vector2D` object with `(x,y)`. 
 	- **Returns**: `Vector2D(x, y)`
@@ -137,7 +146,7 @@ And the following methods too:
 
 #### Vector3D <a name="vect3d"></a>
 
-`Vector3D` is a class that defines tridimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
+`Vector3D` is a class that defines three-dimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
 - `Vector3D::Vector3D()`: creates a `Vector3D(0.0, 0.0, 0.0)`
 - `Vector3D::Vector3D(double x, double y, double z)`: instantiates a new `Vector3D` object with `(x,y,z)`. 
 	- **Returns**: `Vector3D(x, y, z)`
@@ -213,6 +222,7 @@ Uses the [ANSI escape code sequence](https://en.wikipedia.org/wiki/ANSI_escape_c
 
 Uses `SDL_Color` to define colors. </br>
 Every color is RGBA, with  `Uint8 C_WHITE.r`, `Uint8 C_WHITE.g`, `Uint8 C_WHITE.b` and `Uint8 C_WHITE.a`. Alpha is by default set at 255.
+
 
 
 

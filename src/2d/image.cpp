@@ -6,6 +6,7 @@
 
 #include "../../core/misc/include/log.hpp"
 #include "../../core/misc/include/colors.h"
+#include "../../src/misc/include/resources.h"
 #include "include/image.h"
 
 void init_img(int flags) {
@@ -20,12 +21,8 @@ Image::Image() {
 };
 
 Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height) : i_renderer(renderer), path(image_path), x(x_pos), y(y_pos), w(width), h(height) {
-	SDL_Surface *surface = IMG_Load(path);
-	if (!surface) {
-		sdl_error("image.cpp >");
-	}
-	message("Loaded image in memory");
-	texture = SDL_CreateTextureFromSurface(i_renderer, surface);
+	// Use the resource manager to get textures efficently
+	texture = get_texture(i_renderer, path);
 	if (w > 0 && h > 0) {
 		rect.w = w;
 		rect.h = h;
@@ -37,7 +34,6 @@ Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_po
 	rect.x = x;
 	rect.y = y;
 	center = {w / 2, h / 2};
-	SDL_FreeSurface(surface);
 }
 
 void Image::set_color(SDL_Color color) const {
@@ -49,6 +45,7 @@ void Image::render() {
 }
 
 Image::~Image() {
+	remove_texture(path);
 	SDL_DestroyTexture(texture);
 	texture = NULL;
 	std::string msg = "Removed image \"" + std::string(path) + "\" from memory";
