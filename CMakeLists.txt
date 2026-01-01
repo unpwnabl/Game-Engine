@@ -4,7 +4,7 @@ project(GameEngine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES platform/linux/game.cpp core/ui/window.cpp core/ui/renderer.cpp core/ui/text.cpp core/ui/font_paths.cpp src/2d/image.cpp src/misc/resources.cpp src/2d/vector2d.cpp src/3d/vector3d.cpp core/misc/log.cpp core/misc/colors.cpp core/misc/split.cpp core/misc/fps.cpp)
+set(SOURCES platform/linux/game.cpp core/ui/window.cpp core/ui/renderer.cpp core/ui/text.cpp core/ui/font_paths.cpp src/2d/image.cpp src/misc/resources.cpp src/misc/gameobj.cpp src/2d/vector2d.cpp src/3d/vector3d.cpp core/misc/log.cpp core/misc/colors.cpp core/misc/split.cpp core/misc/fps.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
@@ -16,7 +16,7 @@ find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_image REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 PRIVATE SDL2_ttf::SDL2_ttf PRIVATE SDL2_image::SDL2_image)
 
-#target_compile_options(${PROJECT_NAME} PRIVATE -w)
+#target_compile_options(${PROJECT_NAME} PRIVATE -Wreturn-type -Wconversion-null)
 
 # Add the font files to the build directory
 add_custom_command(TARGET  ${PROJECT_NAME} POST_BUILD

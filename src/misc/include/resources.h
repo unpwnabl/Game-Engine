@@ -5,7 +5,7 @@
 
 #include <unordered_map>
 
-SDL_Texture* get_texture(SDL_Renderer* renderer, const char* path);
-void remove_texture(const char* path);
+SDL_Surface* get_surface(const char* path);
+void remove_surface(const char* path);
 
 #endif
