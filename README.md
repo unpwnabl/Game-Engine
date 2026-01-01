@@ -13,8 +13,8 @@ To install, download all of the files from the [official github repository](http
 ## Run
 
 To run the program, use the Shell file `build.sh`.
-> This project requires [SDL2](https://www.libsdl.org) and its dependencies installed. Please refer to their page for more information.
-It also requires [`make`](https://directory.fsf.org/wiki/Make) to build.
+> This project requires [SDL2](https://www.libsdl.org) and its dependencies installed. Please refer to their page for more information. </br>
+It also requires [`make`](https://directory.fsf.org/wiki/Make) to build. </br>
 Many thirdparty elements are missing, such as fonts/images. They're WIP.
 
 ## Wiki

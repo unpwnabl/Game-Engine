@@ -15,6 +15,7 @@
 	- [Source](#src)
 		- [Miscellaneous](#misc_src)
 			- [Resource Manager](#rm)
+            - [GameObjects](#go)
 		- [2D](#2d)
 			- [Image](#image)
 			- [Vector2D](#vect2d)
@@ -62,7 +63,27 @@ The source directory has every component tied to the game engine itself.
 Each time an image is created, we use the resource manager to efficiently load into memory the appropriate texture by checking an [unordered map](https://en.cppreference.com/w/cpp/container/unordered_map.html), which key is the file path. If found, it returns the texture, otherwise it's created from scratch and then added to the map.
 - `SDL_Texture* get_texture(SDL_Renderer* renderer, const char* path)`: returns the texture if found, otherwise creates a new one.
 	- **Returns**: appropriate `SDL_Texture*`
-- `void remove_texture()`: removes a texture from the map. 
+- `void remove_texture()`: removes a texture from the map.
+
+#### GameObjects <a name="go"></a>
+
+Game objects is an abstract class that defines objects inside the engine.
+- `GameObject::GameObject()`: incorrect usage of GameObject objects creation.
+    - **Returns**: `EXIT_FAILURE`
+- `GameObject::GameObject(const char* name, int x, int y, int w, int h, SDL_Renderer* renderer, SDL_Color color)`: creates a new GameObject object with a specific `name` at `(x,y)` with `w*h` dimensions. The object has a default color of `C_WHITE` if not provided
+- `GameObject::~GameObject()`: deconstructor, deals with the clean up of memory. Can be called manually or automatically when the program closes.
+
+Then, the following data fields are accessible:
+- `int x`: X position.
+- `int y`: Y position.
+- `int w`: width.
+- `int h`: height.
+- `Image img`: image.
+- `SDL_Color color`: color.
+
+And the following methods too:
+
+- `GameObject::render()`: renders the `img` into the determined renderer (not the one of the GameObject object, but the one used in the creation of the image).
 
 #### 2D <a name="2d"></a>
 
