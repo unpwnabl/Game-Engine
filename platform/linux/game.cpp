@@ -13,6 +13,8 @@
 #include "../../core/misc/include/log.hpp"
 #include "../../core/misc/include/colors.h"
 #include "../../core/misc/include/fps.h"
+#include "../../core/misc/include/mouse.h"
+#include "../../core/misc/include/events.h"
 #include "../../core/ui/include/window.h"
 #include "../../core/ui/include/renderer.h"
 #include "../../core/ui/include/text.h"
@@ -56,16 +58,8 @@ int main() {
 		Uint64 start = SDL_GetTicks();
 
 		// Event handler
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				gameloop = false;
-			}
-		}
-		const Uint8 *state = SDL_GetKeyboardState(NULL);
-		if (state[SDL_SCANCODE_ESCAPE]) {
-			gameloop = false;
-		}
+		event_handler(window, gameloop);
+		// Clear previous frame
 		renderer_clear(renderer);
 
 		SDL_Rect rect;
@@ -78,7 +72,7 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
-		//player.render();
+		player.render();
 		test2.render();
 
 		cap(start, MAX_FPS, 1, renderer, roboto);

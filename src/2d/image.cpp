@@ -21,7 +21,7 @@ Image::Image() {
 }
 
 Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height, SDL_Color i_color) : i_renderer(renderer), path(image_path), x(x_pos), y(y_pos), w(width), h(height), color(i_color) {
-	// Use the resource manager to get textures efficently
+	// Use the resource manager to get surfaces efficently
 	SDL_Surface *surface = get_surface(path);
 	texture = SDL_CreateTextureFromSurface(i_renderer, surface);
 	if (w > 0 && h > 0) {
@@ -39,11 +39,13 @@ Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_po
 }
 
 Image::~Image() {
-	remove_surface(path);
-	SDL_DestroyTexture(texture);
-	texture = NULL;
-	std::string msg = "Removed image \"" + std::string(path) + "\" from memory";
-	message(msg.c_str());
+	if (texture) {
+		remove_surface(path);
+		SDL_DestroyTexture(texture);
+		texture = NULL;
+		std::string msg = "Removed image \"" + std::string(path) + "\" from memory";
+		message(msg.c_str());
+	}
 }
 
 Image Image::operator=(const Image& img) {

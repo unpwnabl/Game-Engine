@@ -1,3 +1,4 @@
+
 # Game Engine
 
 ## Structure
@@ -12,6 +13,8 @@
 		- [FPS](#fps)
 		- [Log](#log)
 		- [Colors](#colors)
+		- [Mouse](#mouse)
+		- [Event Handler](#eh)
 	- [Source](#src)
 		- [Miscellaneous](#misc_src)
 			- [Resource Manager](#rm)
@@ -244,6 +247,24 @@ Uses the [ANSI escape code sequence](https://en.wikipedia.org/wiki/ANSI_escape_c
 Uses `SDL_Color` to define colors. </br>
 Every color is RGBA, with  `Uint8 C_WHITE.r`, `Uint8 C_WHITE.g`, `Uint8 C_WHITE.b` and `Uint8 C_WHITE.a`. Alpha is by default set at 255.
 
+#### Mouse <a name="mouse"></a>
 
+Accessible data fields:
+- `Vector2D position`: a vector that holds the mouse X and Y positions updated every frame.
+- `Vector2D click`: a generic vector that holds the X, Y position in which a mouse button was clicked, updated every frame.
+- `Vector2D left_click`: a vector that holds the X, Y position in which the left mouse button was clicked, updated every frame.
+- `Vector2D right_click`: a vector that holds the X, Y position in which the right mouse button was clicked, updated every frame.
 
+Methods:
+
+- `Vector2D get_position(SDL_MouseMotionEvent& event)`: gets the mouse X, Y position and stores them in a vector.
+	- **Returns**: a `Vector2D` with the mouse's X and Y position.
+- `Vector2D clicked(SDL_MouseButtonEvent& event)`: gets the coordinates where a mouse button was pressed, and stores them in a vector.
+	- **Returns**: a `Vector2D` with the coordinates.
+
+#### Event Handler <a name="eh"></a>
+
+Every event that SDL captures is processed here.
+
+- `void event_handler(SDL_Window* window, bool& gameloop)`: captures events like mouse or window events to then work with them.
 
