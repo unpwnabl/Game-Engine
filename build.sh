@@ -3,6 +3,7 @@
 clear
 
 if [ -d build ] ; then
+	echo "Found previous build folder, deleting..."
 	rm -rf build
 fi
 

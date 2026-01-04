@@ -5,6 +5,7 @@
 #include "include/renderer.h"
 
 void create_renderer(SDL_Window* window, SDL_Renderer*& renderer) {
+	// Use VSync and hardware acceleration on render
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 	if (!renderer) {
 		sdl_error("renderer.cpp > Renderer couldn't be created");
@@ -25,6 +26,7 @@ void renderer_update(SDL_Renderer* renderer) {
 }
 
 void renderer_clear(SDL_Renderer* renderer) {
+	// Clear the previous frame to black
 	SDL_SetRenderDrawColor(renderer, C_BLACK.r, C_BLACK.g, C_BLACK.b, C_BLACK.a);
 	SDL_RenderClear(renderer);
 }

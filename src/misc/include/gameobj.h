@@ -17,11 +17,11 @@ class GameObject {
 		int h;
 		Image img;
 		
-		GameObject();
 		GameObject(const char* id, int x_pos, int y_pos, int width, int height, SDL_Renderer* renderer, Image& image);
 		~GameObject();
 
-		void render();
+		void set_image(Image& image);
+		void render() const;
 };
 
 #endif

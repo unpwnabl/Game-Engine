@@ -16,10 +16,6 @@ void init_img(int flags) {
 	message("SDL_image initialized successfully");
 }
 
-Image::Image() {
-	error("image.cpp > Please provide correct syntax for Image object. Refer to wiki.md");
-}
-
 Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height, SDL_Color i_color) : i_renderer(renderer), path(image_path), x(x_pos), y(y_pos), w(width), h(height), color(i_color) {
 	// Use the resource manager to get surfaces efficently
 	SDL_Surface *surface = get_surface(path);
@@ -38,6 +34,16 @@ Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_po
 	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 }
 
+Image::Image(const Image& img) {
+	i_renderer = img.i_renderer;
+	path = img.path;
+	x = img.x;
+	y = img.y;
+	w = img.w;
+	h = img.h;
+	color = img.color;
+}
+
 Image::~Image() {
 	if (texture) {
 		remove_surface(path);
@@ -48,23 +54,11 @@ Image::~Image() {
 	}
 }
 
-Image Image::operator=(const Image& img) {
+Image& Image::operator=(const Image& img) {
 	if (this != &img) {
-		path = img.path;
-		texture = img.texture;
-		i_renderer = img.i_renderer;
-		rect = img.rect;
-		x = img.x;
-		y = img.y;
-		w = img.w;
-		h = img.h;
-		center = img.center;
-		color = img.color;
-		return *this;
-	} else {
-		warning("Trying to copy same image");
-		return *this;
+		*this = Image(img);
 	}
+	return *this;
 }
 
 void Image::set_color(SDL_Color i_color) {

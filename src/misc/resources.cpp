@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 #include "../../core/misc/include/log.hpp"
 #include "include/resources.h"
@@ -24,6 +25,10 @@ SDL_Surface* get_surface(const char* path) {
 		}
 		message("Loaded image in memory");
 		map.insert(std::make_pair(path, surface));
+
+		for (auto const& i : map) {
+			std::cout << i.first << "->Surface" << std::endl;
+		}
 		return surface;
 	}
 }

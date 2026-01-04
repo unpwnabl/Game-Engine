@@ -21,11 +21,11 @@ class Image {
 		SDL_Point center;
 		SDL_Color color;
 
-		Image();
 		Image(SDL_Renderer *renderer, const char* image_path, int x_pos = 0, int y_pos = 0, int width = 0, int height = 0, SDL_Color i_color = C_WHITE);
+		Image(const Image& img);
 		~Image();
 
-		Image operator=(const Image& img);
+		Image& operator=(const Image& img);
 
 		void set_color(SDL_Color color);
 		void render() const;
