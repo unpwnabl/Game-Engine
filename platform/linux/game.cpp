@@ -52,12 +52,12 @@ int main() {
 	test.set_color(C_WHITE);
 	test2.set_color(C_RED);
 	Image test3 = test2;
-	test3.x = 300;
+	test3.set_pos(Vector2D(300, 100));
 	test3.set_color(C_GREEN);
 
-	GameObject player("player", 100, 100, 50, 50, renderer, test);
+	GameObject player("player", Vector2D(100, 100), 50, 50, renderer, test);
 
-	Button b1(renderer, "Test", Vector2D(200, 200), 100, 100, test2);
+	//Button b1(renderer, "Test", Vector2D(200, 200), 100, 100, test2);
 
 	while (gameloop) {
 		// Start counting ticks
@@ -78,9 +78,10 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
+		test.render();
 		player.render();
 		test3.render();
-		b1.render(roboto, 10, C_RED);
+		//b1.render(roboto, 10, C_RED);
 
 		cap(start, MAX_FPS, 1, renderer, roboto);
 	

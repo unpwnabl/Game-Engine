@@ -7,6 +7,7 @@
 #include "../../core/misc/include/log.hpp"
 #include "../../core/misc/include/colors.h"
 #include "../../src/misc/include/resources.h"
+#include "include/vector2d.hpp"
 #include "include/image.h"
 
 void init_img(int flags) {
@@ -16,7 +17,9 @@ void init_img(int flags) {
 	message("SDL_image initialized successfully");
 }
 
-Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height, SDL_Color i_color) : i_renderer(renderer), path(image_path), x(x_pos), y(y_pos), w(width), h(height), color(i_color) {
+Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height, SDL_Color i_color) : i_renderer(renderer), path(image_path), w(width), h(height), color(i_color) {
+	position.x = x_pos;
+	position.y = y_pos;
 	// Use the resource manager to get surfaces efficently
 	SDL_Surface *surface = get_surface(path);
 	texture = SDL_CreateTextureFromSurface(i_renderer, surface);
@@ -28,20 +31,14 @@ Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_po
 	} else {
 		error("image.cpp > Incorrect usage of width/height measures");
 	}
-	rect.x = x;
-	rect.y = y;
+	rect.x = position.x;
+	rect.y = position.y;
 	center = {w / 2, h / 2};
 	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 }
 
-Image::Image(const Image& img) {
-	i_renderer = img.i_renderer;
-	path = img.path;
-	x = img.x;
-	y = img.y;
-	w = img.w;
-	h = img.h;
-	color = img.color;
+Image::Image(const Image& img) : i_renderer(img.i_renderer), texture(img.texture), path(img.path), position(img.position), w(img.w), h(img.h), color(img.color) {
+	message("Copied image");
 }
 
 Image::~Image() {
@@ -51,18 +48,41 @@ Image::~Image() {
 		texture = NULL;
 		std::string msg = "Removed image \"" + std::string(path) + "\" from memory";
 		message(msg.c_str());
+	} else {
+		warning("No texture found, already deleted?");
 	}
 }
 
-Image& Image::operator=(const Image& img) {
-	if (this != &img) {
-		*this = Image(img);
-	}
-	return *this;
+Vector2D Image::get_pos() const {
+	return position;
 }
 
-void Image::set_color(SDL_Color i_color) {
-	color = i_color;
+void Image::set_pos(const Vector2D& n_pos) {
+	position = n_pos;
+}
+
+int Image::get_width() const {
+	return w;
+}
+
+int Image::get_height() const {
+	return h;
+}
+
+void Image::set_width(int n_w) {
+	w = n_w;
+}
+
+void Image::set_height(int n_h) {
+	h = n_h;
+}
+
+SDL_Color Image::get_color() const {
+	return color;
+}
+
+void Image::set_color(const SDL_Color& n_c) {
+	color = n_c;
 	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 }
 

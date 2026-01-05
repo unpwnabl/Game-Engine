@@ -3,7 +3,7 @@
 clear
 
 if [ -d build ] ; then
-	echo "Found previous build folder, deleting..."
+	echo -e "\033[0;33m[!] Found previous build folder, deleting...\033[0m"
 	rm -rf build
 fi
 
