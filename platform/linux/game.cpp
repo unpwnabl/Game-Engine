@@ -48,14 +48,15 @@ int main() {
 	init_img(IMG_INIT_PNG);
 
 	Image test(renderer, "imgs/test.png", 100, 100, 100, 100);
-	Image test2(renderer, "imgs/test.png", 200, 100, 100, 100);
+	Image test2(renderer, "imgs/test.png", 250, 100, 100, 100);
 	test.set_color(C_WHITE);
 	test2.set_color(C_RED);
-	Image test3 = test2;
-	test3.set_pos(Vector2D(300, 100));
+	Image test3 = test;
+	test3.set_pos(Vector2D(200, 100));
+	test3.set_width(200);
 	test3.set_color(C_GREEN);
 
-	GameObject player("player", Vector2D(100, 100), 50, 50, renderer, test);
+	GameObject player("player", Vector2D(100, 100), 50, 50, renderer, test2);
 
 	//Button b1(renderer, "Test", Vector2D(200, 200), 100, 100, test2);
 

@@ -22,7 +22,6 @@ GameObject::GameObject(const GameObject& go) : go_renderer(go.go_renderer), name
 GameObject::~GameObject() {
 	go_renderer = NULL;
 	position.~Vector2D();
-	img.~Image();
 	std::string msg = "Destroyed GameObject::" + std::string(name);
 	name = "";
 	message(msg.c_str());

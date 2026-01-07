@@ -59,6 +59,8 @@ Vector2D Image::get_pos() const {
 
 void Image::set_pos(const Vector2D& n_pos) {
 	position = n_pos;
+	rect.x = position.x;
+	rect.y = position.y;
 }
 
 int Image::get_width() const {
@@ -71,11 +73,16 @@ int Image::get_height() const {
 
 void Image::set_width(int n_w) {
 	w = n_w;
+	rect.w = w;
+	center = {w / 2, h / 2};
 }
 
 void Image::set_height(int n_h) {
 	h = n_h;
+	rect.h = h;
+	center = {w / 2, h / 2};
 }
+
 
 SDL_Color Image::get_color() const {
 	return color;
