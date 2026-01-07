@@ -9,7 +9,6 @@
 
 class GameObject {
 	private:
-		SDL_Renderer* go_renderer;
 		const char* name;
 		Vector2D position;
 		int w;
@@ -17,11 +16,10 @@ class GameObject {
 		Image img;
 
 	public:
-		GameObject(const char* id, Vector2D pos, int width, int height, SDL_Renderer* renderer, Image& image);
+		GameObject(const char* id, Vector2D pos, int width, int height, Image& image);
 		GameObject(const GameObject& go);
 		~GameObject();
 
-		void set_renderer(SDL_Renderer* renderer);
 		const char* get_name() const;
 		void set_name(const char* n_n);
 		Vector2D get_pos() const;

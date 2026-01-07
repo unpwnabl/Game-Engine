@@ -37,7 +37,8 @@ Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_po
 	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 }
 
-Image::Image(const Image& img) : i_renderer(img.i_renderer), texture(img.texture), path(img.path), position(img.position), w(img.w), h(img.h), color(img.color) {
+Image::Image(const Image& img) : i_renderer(img.i_renderer), texture(img.texture), path(img.path), position(img.position), w(img.w), h(img.h), color(img.color), rect(img.rect) 
+{
 	message("Copied image");
 }
 

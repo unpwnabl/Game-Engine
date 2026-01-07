@@ -7,28 +7,26 @@
 #include "../../core/misc/include/log.hpp"
 #include "../2d/include/image.h"
 
-GameObject::GameObject(const char* id, Vector2D pos, int width, int height, SDL_Renderer* renderer, Image& image) : name(id), w(width), h(height), go_renderer(renderer), img(image) {
+GameObject::GameObject(const char* id, Vector2D pos, int width, int height, Image& image) : name(id), w(width), h(height), img(image) {
 	std::string msg = "Created GameObject::" + std::string(name);
 	message(msg.c_str());
 	position.x = pos.x;
 	position.y = pos.y;
+	img.set_pos(position);
+	img.set_width(w);
+	img.set_height(h);
 }
 
-GameObject::GameObject(const GameObject& go) : go_renderer(go.go_renderer), name(go.name), position(go.position), w(go.w), h(go.h), img(go.img) {
+GameObject::GameObject(const GameObject& go) : name(go.name), position(go.position), w(go.w), h(go.h), img(go.img) {
 	std::string msg = "Copied GameObject::" + std::string(name);
 	message(msg.c_str());
 }
 
 GameObject::~GameObject() {
-	go_renderer = NULL;
 	position.~Vector2D();
 	std::string msg = "Destroyed GameObject::" + std::string(name);
 	name = "";
 	message(msg.c_str());
-}
-
-void GameObject::set_renderer(SDL_Renderer* renderer) {
-	go_renderer = renderer;
 }
 
 const char* GameObject::get_name() const {
@@ -45,6 +43,7 @@ Vector2D GameObject::get_pos() const {
 
 void GameObject::set_pos(const Vector2D& n_pos) {
 	position = n_pos;
+	img.set_pos(position);
 }
 
 int GameObject::get_width() const {
@@ -57,10 +56,12 @@ int GameObject::get_height() const {
 
 void GameObject::set_width(int n_w) {
 	w = n_w;
+	img.set_width(w);
 }
 
 void GameObject::set_height(int n_h) {
 	h = n_h;
+	img.set_height(h);
 }
 
 Image GameObject::get_image() const {

@@ -20,7 +20,7 @@
 #include "../../core/ui/include/text.h"
 #include "../../core/ui/include/font_paths.hpp"
 #include "../../src/2d/include/image.h"
-#include "../../src/2d/include/button.h"
+//#include "../../src/2d/include/button.h"
 #include "../../src/2d/include/vector2d.hpp"
 #include "../../src/3d/include/vector3d.hpp"
 #include "../../src/misc/include/gameobj.h"
@@ -48,17 +48,11 @@ int main() {
 	init_img(IMG_INIT_PNG);
 
 	Image test(renderer, "imgs/test.png", 100, 100, 100, 100);
-	Image test2(renderer, "imgs/test.png", 250, 100, 100, 100);
+	Image test2(renderer, "imgs/test.png", 100, 100, 100, 100);
 	test.set_color(C_WHITE);
 	test2.set_color(C_RED);
-	Image test3 = test;
-	test3.set_pos(Vector2D(200, 100));
-	test3.set_width(200);
-	test3.set_color(C_GREEN);
 
-	GameObject player("player", Vector2D(100, 100), 50, 50, renderer, test2);
-
-	//Button b1(renderer, "Test", Vector2D(200, 200), 100, 100, test2);
+	GameObject player("player", Vector2D(250, 100), 200, 200, test2);
 
 	while (gameloop) {
 		// Start counting ticks
@@ -81,8 +75,6 @@ int main() {
 
 		test.render();
 		player.render();
-		test3.render();
-		//b1.render(roboto, 10, C_RED);
 
 		cap(start, MAX_FPS, 1, renderer, roboto);
 	
