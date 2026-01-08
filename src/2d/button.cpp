@@ -12,16 +12,11 @@
 #include "include/image.h"
 #include "../misc/include/gameobj.h"
 
-Button::Button(const char* txt, Vector2D pos, int width, int height, Image image) : GameObject("Button", pos, width, height, image), text(txt), position(pos), w(width), h(height) { }
+Button::Button(const char* txt, Vector2D pos, int width, int height, const Image& image) : GameObject("Button", pos, width, height, image), text(txt), position(pos), w(width), h(height) { }
 
 Button::~Button() {
-	b_renderer = NULL;
 	text = "";
 	position.~Vector2D();
-}
-
-void Button::set_renderer(SDL_Renderer* renderer) {
-	b_renderer = renderer;
 }
 
 Vector2D Button::get_pos() const {
@@ -52,7 +47,7 @@ void Button::set_height(int n_h) {
 }
 
 bool Button::clicked() const {
-	if ((left_click.x >= position.x && left_click.x <= position.x + w) && (left_click.y <= position.y && left_click.y >= position.y + h)) {
+	if ((left_click.x >= position.x && left_click.x <= position.x + w) && (left_click.y <= position.y && left_click.y >= position.y + h) && is_clicked) {
 		return true;
 	}
 	return false;
@@ -61,11 +56,7 @@ bool Button::clicked() const {
 void Button::render(TTF_Font* font, int scale, SDL_Color color) const {
 	// Render text in the middle of the button	
 	get_image().render();
-	if (b_renderer) {
-		int len_x = position.x + get_image().get_pos().x / 2 - (2.2 * (int)std::strlen(text));
-		int len_y = position.y - get_image().get_pos().y + scale / 2;
-		render_text(b_renderer, text, font, len_x, len_y, scale, color);
-	} else {
-		warning("No renderer given, text is omitted");
-	}
+	int len_x = position.x + get_image().get_pos().x / 2 - (2.2 * (int)std::strlen(text));
+	int len_y = position.y - get_image().get_pos().y + scale / 2;
+	render_text(get_image().get_renderer(), text, font, len_x, len_y, scale, color);
 }

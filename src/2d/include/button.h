@@ -11,7 +11,6 @@
 
 class Button : public GameObject {
 	private:
-		SDL_Renderer* b_renderer = NULL;
 		const char* text;
 		Vector2D position;
 		int w;
@@ -19,10 +18,9 @@ class Button : public GameObject {
 	
 	public:
 
-		Button(const char* txt, Vector2D pos, int width, int height, Image image);
+		Button(const char* txt, Vector2D pos, int width, int height, const Image& image);
 		~Button();
 
-		void set_renderer(SDL_Renderer* renderer);
 		Vector2D get_pos() const;
 		void set_pos(const Vector2D& n_pos);
 		int get_width() const;

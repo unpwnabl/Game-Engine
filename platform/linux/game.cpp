@@ -20,7 +20,7 @@
 #include "../../core/ui/include/text.h"
 #include "../../core/ui/include/font_paths.hpp"
 #include "../../src/2d/include/image.h"
-//#include "../../src/2d/include/button.h"
+#include "../../src/2d/include/button.h"
 #include "../../src/2d/include/vector2d.hpp"
 #include "../../src/3d/include/vector3d.hpp"
 #include "../../src/misc/include/gameobj.h"
@@ -52,7 +52,8 @@ int main() {
 	test.set_color(C_WHITE);
 	test2.set_color(C_RED);
 
-	GameObject player("player", Vector2D(250, 100), 200, 200, test2);
+	GameObject player("player", Vector2D(250, 100), 200, 200, std::move(test2));
+	Button b1("Test", Vector2D(100, 200), 50, 50, std::move(test));
 
 	while (gameloop) {
 		// Start counting ticks
@@ -73,8 +74,12 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
-		test.render();
+		b1.render(roboto, 10, C_GREEN);
 		player.render();
+		
+		if (b1.clicked()) {
+			std::cout << "Button has been clicked" << std::endl;
+		}
 
 		cap(start, MAX_FPS, 1, renderer, roboto);
 	

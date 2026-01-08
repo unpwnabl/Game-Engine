@@ -16,7 +16,7 @@ class GameObject {
 		Image img;
 
 	public:
-		GameObject(const char* id, Vector2D pos, int width, int height, Image& image);
+		GameObject(const char* id, Vector2D pos, int width, int height, const Image& image);
 		GameObject(const GameObject& go);
 		~GameObject();
 

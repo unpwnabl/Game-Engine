@@ -17,12 +17,11 @@ void init_img(int flags) {
 	message("SDL_image initialized successfully");
 }
 
-Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height, SDL_Color i_color) : i_renderer(renderer), path(image_path), w(width), h(height), color(i_color) {
+Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height, SDL_Color i_color) noexcept : i_renderer(renderer), path(image_path), w(width), h(height), color(i_color) {
 	position.x = x_pos;
 	position.y = y_pos;
-	// Use the resource manager to get surfaces efficently
-	SDL_Surface *surface = get_surface(path);
-	texture = SDL_CreateTextureFromSurface(i_renderer, surface);
+	// Use the resource manager to get surfaces and create textures efficently
+	texture = SDL_CreateTextureFromSurface(i_renderer, get_surface(path));
 	if (w > 0 && h > 0) {
 		rect.w = w;
 		rect.h = h;
@@ -37,12 +36,17 @@ Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_po
 	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 }
 
-Image::Image(const Image& img) : i_renderer(img.i_renderer), texture(img.texture), path(img.path), position(img.position), w(img.w), h(img.h), color(img.color), rect(img.rect) 
+Image::Image(const Image& img) noexcept : i_renderer(img.i_renderer), texture(img.texture), path(img.path), position(img.position), w(img.w), h(img.h), color(img.color), rect(img.rect) 
 {
 	message("Copied image");
 }
 
-Image::~Image() {
+Image::Image(Image&& img) noexcept : i_renderer(img.i_renderer), texture(img.texture), path(img.path), position(img.position), w(img.w), h(img.h), color(img.color), rect(img.rect) {
+	img.texture = NULL;
+	message("Moved image");
+}
+
+Image::~Image() noexcept {
 	if (texture) {
 		remove_surface(path);
 		SDL_DestroyTexture(texture);
@@ -53,6 +57,55 @@ Image::~Image() {
 		warning("No texture found, already deleted?");
 	}
 }
+
+Image Image::operator=(const Image& img) noexcept {
+	if (this != &img) {
+		if (texture) {
+			SDL_DestroyTexture(texture);
+			texture = NULL;
+		}
+
+		i_renderer = img.i_renderer;
+		texture = img.texture;
+		path = img.path;
+		position = img.position;
+		w = img.w;
+		h = img.h;
+		color = img.color;
+		rect = img.rect;
+	
+		if (img.texture) {
+			texture = SDL_CreateTextureFromSurface(i_renderer, get_surface(path));
+		} else {
+			texture = NULL;
+		}
+	}
+	return *this;
+ 
+}
+
+Image Image::operator=(Image&& img) noexcept {
+	if (this != &img) {
+		if (texture) {
+			SDL_DestroyTexture(texture);
+			texture = NULL;
+		}
+
+		i_renderer = img.i_renderer;
+		texture = img.texture;
+		path = img.path;
+		position = img.position;
+		w = img.w;
+		h = img.h;
+		color = img.color;
+		rect = img.rect;
+	
+		img.texture = NULL;
+		img.i_renderer = NULL;
+	}
+	return *this;
+}
+
 
 Vector2D Image::get_pos() const {
 	return position;
@@ -92,6 +145,10 @@ SDL_Color Image::get_color() const {
 void Image::set_color(const SDL_Color& n_c) {
 	color = n_c;
 	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+}
+
+SDL_Renderer* Image::get_renderer() const {
+	return i_renderer;
 }
 
 void Image::render() const {

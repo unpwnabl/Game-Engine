@@ -22,10 +22,14 @@ class Image {
 	
 	public:
 
-		Image(SDL_Renderer *renderer, const char* image_path, int x_pos = 0, int y_pos = 0, int width = 0, int height = 0, SDL_Color i_color = C_WHITE);
-		Image(const Image& img);
-		~Image();
-	
+		Image(SDL_Renderer *renderer, const char* image_path, int x_pos = 0, int y_pos = 0, int width = 0, int height = 0, SDL_Color i_color = C_WHITE) noexcept;
+		Image(const Image& img) noexcept;;
+		Image(Image&& img) noexcept;
+		~Image() noexcept;
+
+		Image operator=(const Image& img) noexcept;
+		Image operator=(Image&& img) noexcept;
+
 		Vector2D get_pos() const;
 		void set_pos(const Vector2D& n_pos);
 		int get_width() const;
@@ -34,6 +38,7 @@ class Image {
 		void set_height(int n_h);
 		SDL_Color get_color() const;
 		void set_color(const SDL_Color& color);
+		SDL_Renderer* get_renderer() const;
 		void render() const;
 };
 

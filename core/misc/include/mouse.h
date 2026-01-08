@@ -5,6 +5,7 @@
 
 #include "../../../src/2d/include/vector2d.hpp"
 
+extern bool is_clicked;
 extern Vector2D position;
 extern Vector2D click;
 extern Vector2D left_click;
