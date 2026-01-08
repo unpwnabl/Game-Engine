@@ -22,8 +22,8 @@ class Image {
 	
 	public:
 
-		Image(SDL_Renderer *renderer, const char* image_path, int x_pos = 0, int y_pos = 0, int width = 0, int height = 0, SDL_Color i_color = C_WHITE) noexcept;
-		Image(const Image& img) noexcept;;
+		Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos, int width = 0, int height = 0, SDL_Color i_color = C_WHITE) noexcept;
+		Image(const Image& img) noexcept;
 		Image(Image&& img) noexcept;
 		~Image() noexcept;
 

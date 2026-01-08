@@ -47,8 +47,8 @@ int main() {
 	// Initialize image manager
 	init_img(IMG_INIT_PNG);
 
-	Image test(renderer, "imgs/test.png", 100, 100, 100, 100);
-	Image test2(renderer, "imgs/test.png", 100, 100, 100, 100);
+	Image test(renderer, "imgs/test.png", Vector2D(100, 100), 100, 100);
+	Image test2(renderer, "imgs/test.png", Vector2D(100, 100), 100, 100);
 	test.set_color(C_WHITE);
 	test2.set_color(C_RED);
 
@@ -76,11 +76,12 @@ int main() {
 
 		b1.render(roboto, 10, C_GREEN);
 		player.render();
-		
-		if (b1.clicked()) {
+	
+		bool yes = b1.clicked();
+		if (yes) {
 			std::cout << "Button has been clicked" << std::endl;
 		}
-
+		
 		cap(start, MAX_FPS, 1, renderer, roboto);
 	
 		// Update renderer

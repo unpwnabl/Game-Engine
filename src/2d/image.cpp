@@ -17,9 +17,9 @@ void init_img(int flags) {
 	message("SDL_image initialized successfully");
 }
 
-Image::Image(SDL_Renderer *renderer, const char* image_path, int x_pos, int y_pos,int width, int height, SDL_Color i_color) noexcept : i_renderer(renderer), path(image_path), w(width), h(height), color(i_color) {
-	position.x = x_pos;
-	position.y = y_pos;
+Image::Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos ,int width, int height, SDL_Color i_color) noexcept : i_renderer(renderer), path(image_path), w(width), h(height), color(i_color) {
+	position.x = pos.x;
+	position.y = pos.y;
 	// Use the resource manager to get surfaces and create textures efficently
 	texture = SDL_CreateTextureFromSurface(i_renderer, get_surface(path));
 	if (w > 0 && h > 0) {

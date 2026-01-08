@@ -1,4 +1,5 @@
 
+
 # Game Engine
 
 ## Structure
@@ -21,6 +22,7 @@
             - [GameObjects](#go)
 		- [2D](#2d)
 			- [Image](#image)
+			- [Button](#btn)
 			- [Vector2D](#vect2d)
 		- [3D](#3d)
 			- [Vector3D](#vect3d)
@@ -73,19 +75,28 @@ Each time an image is created, we use the resource manager to efficiently load i
 Game objects is an abstract class that defines objects inside the engine.
 - `GameObject::GameObject()`: incorrect usage of GameObject objects creation.
     - **Returns**: `EXIT_FAILURE`
-- `GameObject::GameObject(const char* name, int x, int y, int w, int h, SDL_Renderer* renderer, SDL_Color color)`: creates a new GameObject object with a specific `name` at `(x,y)` with `w*h` dimensions. The object has a default color of `C_WHITE` if not provided
-- `GameObject::~GameObject()`: deconstructor, deals with the clean up of memory. Can be called manually or automatically when the program closes.
+- `GameObject::GameObject(const char* name, const Vector2D& pos, int w, int h, SDL_Renderer* renderer, SDL_Color color)`: creates a new GameObject object with a specific `name` at `(pos.x,pos.y)` with `w*h` dimensions. The object has a default color of `C_WHITE` if not provided
+- `GameObject::~GameObject()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
 
-Then, the following data fields are accessible:
-- `int x`: X position.
-- `int y`: Y position.
-- `int w`: width.
-- `int h`: height.
-- `Image img`: image.
-- `SDL_Color color`: color.
-
-And the following methods too:
-
+Then, the following methods are accessible:
+- `const char* get_name() const`: get the GameObject object name.
+	- **Returns**: a `const char*` array.
+-  `void set_name(const char* n_n)`: set the GameObject object name,
+- `Vector2D get_pos() const`: get the GameObject object position.
+	- **Returns**: a `Vector2D` of the position.
+- `void set_pos(const Vector2D& n_pos)`: set the GameObject object position using a `Vector2D`.
+- `int get_width() const`: get the GameObject object width.
+	- **Returns**: a `int` of the width.
+- `int get_height() const`: get the GameObject object height.
+	- **Returns**: a `int` of the width.
+- `void set_width(int n_w)`: set the GameObject object width.
+- `void set_height(int n_h)`: set the GameObject object height.
+- `Image& get_image()`: get the image alias.
+	- **Returns**: a `Image&` alias.
+- `const Image& get_image() const`: get the constant image alias, overrides the previous one if needed.
+	- **Returns**: a `const Image&` alias.
+- `void set_image(const Image& image)`: set the GameObject object image using the copy constructor.
+- `void set_image(Image&& image)`: set the GameObject object image using the move constructor. **More efficent**.
 - `GameObject::render()`: renders the `img` into the determined renderer (not the one of the GameObject object, but the one used in the creation of the image).
 
 #### 2D <a name="2d"></a>
@@ -95,28 +106,49 @@ And the following methods too:
 #### Image <a name="image"></a>
 
 `Image` is the class that defines all images rendered onto the window. Every time a image is created, it uses a resource manager to see if it was already loaded into memory. If it's the first instance, it is added, otherwise it's loaded as-is. Each one can be created as such:
-- `Image::Image()`: incorrect usage of Image object creation.
-	- **Returns**: `EXIT_FAILURE`
-- `Image::Image(SDL_Renderer *renderer, const char* image_path, int width, int height)`: instantiates a new Image object onto a given `render`, with the file located in `image_path` (all images are stored into `core/imgs`, a folder then copied into the build directory). By default, `width` and `height` are set to the original image size, but if provided, the image is scaled accordingly.
-- `Image::~Image()`: deconstructor, deals with the clean up of memory. Can be called manually or automatically when the program closes.
+- `Image::Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos int width, int height)`: instantiates a new Image object onto a given `render`, with the file located in `image_path` (all images are stored into `core/imgs`, a folder then copied into the build directory) at `(pos.x,pos.y)`. By default, `width` and `height` are set to the original image size, but if provided, the image is scaled accordingly.
+- `Image(const Image& img) noexcept`: copy constructor.
+- `Image(Image&& img) noexcept`: move constructor.
+- `Image::~Image()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
 
-Then, the following data fields are accessible:
-
-- `int x`: X position.
-- `int y`: Y position.
-- `int w`: width of image.
-- `int h`: height of image.
-- `SDL_Point center`: a point indicating the center of the texture.
-
-And the following methods too:
-
-- `void Image::render(int x_pos, int y_pos)`: renders the image at a given position `(x_pos,y_pos)`. By default, they're set to the origin point, else to the set position.
+Then, the following methods are accessible:
+- `Vector2D get_pos() const`: get the Image object position.
+	- **Returns**: a `Vector2D` of the position.
+- `void set_pos(const Vector2D& n_pos)`: set the Image object position using a `Vector2D`.
+- `int get_width() const`: get the Image object width.
+	- **Returns**: a `int` of the width.
+- `int get_height() const`: get the Image object height.
+	- **Returns**: a `int` of the width.
+- `void set_width(int n_w)`: set the Image object width.
+- `void set_height(int n_h)`: set the Image object height.
+- `SDL_Color get_color() const`: get the Image object color.
+	- **Returns**: a `SDL_Color`
 - `void Image::set_color(SDL_Color color)`: changes the image color to the RGBA value of `color`. 
 > When this texture is rendered, during the copy operation each source color channel is modulated by the appropriate color value according to the following formula: $src_C = src_C * (color / 255)$
-- `void Image::traslate(int nx, int ny)`: traslate the image to a new position at `(nx,ny)`.
-- `void Image::rotate(double theta)`: rotates the image by an angle `theta` (in degrees) using `SDL_Point center` as pivot.
-- `void Image::scale(double factor)`: scale the image size using a factor.
-- `void Image::reflect()`: reflects the image along the Y axis.
+- `SDL_Renderer* get_renderer() const`: get the Image object renderer.
+	- **Returns**: a `SDL_Renderer*`
+- `void Image::render(int x_pos, int y_pos)`: renders the image at a given position `(x_pos,y_pos)`. By default, they're set to the origin point, else to the set position.
+
+#### Button <a name="btn"></a>
+
+A simple `Button` UI object, derived from [`GameObject`](#gameobj). Each one can be created as such:
+- `Button(const char* txt, const Vector2D& pos, int width, int height, const Image& image) noexcept`: creates a button that will display the `txt` at `(pos.x,pos.y)` with size `width*height`, using the `image` as sprite.
+- `~Button() noexcept`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
+
+Then, the following methods are accessible:
+
+- `Vector2D get_pos() const`: get the Button object position.
+	- **Returns**: a `Vector2D` of the position.
+- `void set_pos(const Vector2D& n_pos)`: set the Button object position using a `Vector2D`
+- `int get_width() const`: get the Button object width.
+	- **Returns**: a `int` of the width.
+- `int get_height() const`: get the Button object height.
+	- **Returns**: a `int` of the height.
+- `void set_width(int n_w)`: set the Button object width.
+- `void set_height(int n_h)`: set the Button object height.
+- `bool clicked() const`: get the Button object state.
+	- **Returns**: `true` if the button is clicked, else `false`
+- `void render(TTF_Font* font, int scale = 10, SDL_Color color = C_WHITE) const`: render the `image` and the text using the `font` with size `scale` and color `color`.
 
 #### Vector2D <a name="vect2d"></a>
 
@@ -267,4 +299,3 @@ Methods:
 Every event that SDL captures is processed here.
 
 - `void event_handler(SDL_Window* window, bool& gameloop)`: captures events like mouse or window events to then work with them.
-

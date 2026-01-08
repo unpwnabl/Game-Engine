@@ -18,8 +18,8 @@ class Button : public GameObject {
 	
 	public:
 
-		Button(const char* txt, Vector2D pos, int width, int height, const Image& image);
-		~Button();
+		Button(const char* txt, const Vector2D& pos, int width, int height, const Image& image) noexcept;
+		~Button() noexcept;
 
 		Vector2D get_pos() const;
 		void set_pos(const Vector2D& n_pos);

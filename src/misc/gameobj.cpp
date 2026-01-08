@@ -7,7 +7,7 @@
 #include "../../core/misc/include/log.hpp"
 #include "../2d/include/image.h"
 
-GameObject::GameObject(const char* id, Vector2D pos, int width, int height, const Image& image) : name(id), w(width), h(height), img(image) {
+GameObject::GameObject(const char* id, const Vector2D& pos, int width, int height, const Image& image) : name(id), w(width), h(height), img(image) {
 	std::string msg = "Created GameObject::" + std::string(name);
 	message(msg.c_str());
 	position.x = pos.x;
@@ -23,10 +23,7 @@ GameObject::GameObject(const GameObject& go) : name(go.name), position(go.positi
 }
 
 GameObject::~GameObject() {
-	img.~Image();
-	position.~Vector2D();
 	std::string msg = "Destroyed GameObject::" + std::string(name);
-	name = "";
 	message(msg.c_str());
 }
 
@@ -38,7 +35,7 @@ void GameObject::set_name(const char* n_n) {
 	name = n_n;
 }
 
-Vector2D GameObject::get_pos() const {
+const Vector2D& GameObject::get_pos() const {
 	return position;
 }
 
@@ -65,11 +62,19 @@ void GameObject::set_height(int n_h) {
 	img.set_height(h);
 }
 
-Image GameObject::get_image() const {
+Image& GameObject::get_image() {
+	return img;
+}
+
+const Image& GameObject::get_image() const {
 	return img;
 }
 
 void GameObject::set_image(const Image& image) {
+	img = image;
+}
+
+void GameObject::set_image(Image&& image) {
 	img = std::move(image);
 }
 
