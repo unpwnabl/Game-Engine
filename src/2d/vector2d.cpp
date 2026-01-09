@@ -48,6 +48,20 @@ bool Vector2D::operator>(const Vector2D& v2d) const {
 	return false;
 }
 
+bool Vector2D::operator<=(const Vector2D& v2d) const {
+	if (x <= v2d.x && y <= v2d.y) {
+		return true;
+	}
+	return false;
+}
+
+bool Vector2D::operator>=(const Vector2D& v2d) const {
+	if (x >= v2d.x && y >= v2d.y) {
+		return true;
+	}
+	return false;
+}
+
 std::ostream& operator<<(std::ostream& os, const Vector2D& v2d) {
 	return os << "Vector2D(" << v2d.x << ", " << v2d.y << ")";
 }

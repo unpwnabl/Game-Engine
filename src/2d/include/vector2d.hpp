@@ -22,6 +22,8 @@ class Vector2D {
 		bool operator!=(const Vector2D& v2d) const;
 		bool operator<(const Vector2D& v2d) const;
 		bool operator>(const Vector2D& v2d) const;
+		bool operator<=(const Vector2D& v2d) const;
+		bool operator>=(const Vector2D& v2d) const;
 		friend std::ostream& operator<<(std::ostream& os, const Vector2D& v2d);
 		
 		double magnitude() const;

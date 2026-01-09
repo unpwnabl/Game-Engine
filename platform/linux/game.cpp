@@ -24,6 +24,7 @@
 #include "../../src/2d/include/vector2d.hpp"
 #include "../../src/3d/include/vector3d.hpp"
 #include "../../src/misc/include/gameobj.h"
+#include "../../src/misc/include/rigidbody.h"
 
 bool gameloop = true;
 
@@ -47,18 +48,14 @@ int main() {
 	// Initialize image manager
 	init_img(IMG_INIT_PNG);
 
-	Image test(renderer, "imgs/test.png", Vector2D(100, 100), 100, 100);
-	Image test2(renderer, "imgs/test.png", Vector2D(100, 100), 100, 100);
-	test.set_color(C_WHITE);
-	test2.set_color(C_RED);
-
-	GameObject player("player", Vector2D(250, 100), 200, 200, std::move(test2));
-	Button b1("Test", Vector2D(100, 200), 50, 50, std::move(test));
+	Image sprite(renderer, "imgs/test.png", Vector2D(100, 100), 100, 100);
+	sprite.set_color(C_WHITE);
+	GameObject player("player", Vector2D(100, 100), 100, 75, std::move(sprite));
+	player.rb->set_mass(2.0);
 
 	while (gameloop) {
 		// Start counting ticks
 		Uint64 start = SDL_GetTicks();
-
 		// Event handler
 		event_handler(window, gameloop);
 		// Clear previous frame
@@ -74,21 +71,18 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
-		b1.render(roboto, 10, C_GREEN);
+		player.rb->add_force(Vector2D(1, -2.0));
+		player.rb->constrain();
+
 		player.render();
-	
-		bool yes = b1.clicked();
-		if (yes) {
-			std::cout << "Button has been clicked" << std::endl;
-		}
 		
+		// Cap FPS
 		cap(start, MAX_FPS, 1, renderer, roboto);
-	
 		// Update renderer
 		renderer_update(renderer);
 	}
 	
-	// End program while cleaning memory
+	// End program and clean memory
 	TTF_CloseFont(roboto);
 	close_ttf();
 	close_img();

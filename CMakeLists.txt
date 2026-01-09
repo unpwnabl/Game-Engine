@@ -4,11 +4,11 @@ project(GameEngine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES platform/linux/game.cpp core/ui/window.cpp core/ui/renderer.cpp core/ui/text.cpp core/ui/font_paths.cpp src/2d/image.cpp src/misc/gameobj.cpp src/misc/resources.cpp src/2d/button.cpp src/2d/vector2d.cpp src/3d/vector3d.cpp core/misc/log.cpp core/misc/colors.cpp core/misc/split.cpp core/misc/fps.cpp core/misc/mouse.cpp core/misc/events.cpp)
+set(SOURCES platform/linux/game.cpp core/ui/window.cpp core/ui/renderer.cpp core/ui/text.cpp core/ui/font_paths.cpp src/2d/image.cpp src/misc/gameobj.cpp src/misc/resources.cpp src/misc/rigidbody.cpp src/2d/button.cpp src/2d/vector2d.cpp src/3d/vector3d.cpp core/misc/log.cpp core/misc/colors.cpp core/misc/split.cpp core/misc/fps.cpp core/misc/interpolation.cpp core/misc/mouse.cpp core/misc/events.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE core/ui/include core/misc/include PRIVATE platform/linux PRIVATE src/2d/include PRIVATE src/3d/include PRIVATE src/misc/include)
+target_include_directories(${PROJECT_NAME} PRIVATE core/ui/include PRIVATE core/misc/include PRIVATE platform/linux PRIVATE src/2d/include PRIVATE src/3d/include PRIVATE src/misc/include)
 
 # Imposes SDL2 as required
 find_package(SDL2 REQUIRED)

@@ -1,11 +1,10 @@
-#include <SDL2/SDL.h>
-
 #include <iostream>
 #include <string>
 
 #include "include/gameobj.h"
 #include "../../core/misc/include/log.hpp"
 #include "../2d/include/image.h"
+#include "include/rigidbody.h"
 
 GameObject::GameObject(const char* id, const Vector2D& pos, int width, int height, const Image& image) : name(id), w(width), h(height), img(image) {
 	std::string msg = "Created GameObject::" + std::string(name);
@@ -15,6 +14,7 @@ GameObject::GameObject(const char* id, const Vector2D& pos, int width, int heigh
 	img.set_pos(position);
 	img.set_width(w);
 	img.set_height(h);
+	rb = new Rigidbody(this);
 }
 
 GameObject::GameObject(const GameObject& go) : name(go.name), position(go.position), w(go.w), h(go.h), img(go.img) {
@@ -23,6 +23,7 @@ GameObject::GameObject(const GameObject& go) : name(go.name), position(go.positi
 }
 
 GameObject::~GameObject() {
+	delete rb;
 	std::string msg = "Destroyed GameObject::" + std::string(name);
 	message(msg.c_str());
 }
@@ -35,7 +36,7 @@ void GameObject::set_name(const char* n_n) {
 	name = n_n;
 }
 
-const Vector2D& GameObject::get_pos() const {
+Vector2D GameObject::get_pos() const {
 	return position;
 }
 
