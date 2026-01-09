@@ -1,6 +1,3 @@
-
-
-
 # Game Engine
 
 ## Index
@@ -115,11 +112,14 @@ Then, the following methods are accessible:
 	- **Returns**: a `const double` of the mass.
 - `const double get_drag() const`: get the Rigidbody object drag.
 	- **Returns**: a `const double` of the drag.
-- `void add_force(const Vector2D& f)`: add a force onto the Rigidbody object. Uses $\frac{F.x \times \delta t}{m}$
-- `void accelerate(const Vector2D& a)`: accelerate the Rigidbody object. Uses $F.x \times \delta t$
-- `void impulse(const Vector2D& i)`: add an impulse onto the Rigidbody object. Uses $\frac{F.x}{m}$
-- `void move(const Vector2D& n_pos)`: move the Rigidbody object to a determined `Vector2D` position using LERP and a step of `0.1`.
-- `void constrain()`: constrain the Rigidbody object into the window.
+- `void add_force(const Vector2D& f)`: add a force onto the Rigidbody object. Uses $\frac{F.x \times \delta t}{m}$ </br> Always constrained to stay within the screen.
+- `void accelerate(const Vector2D& a)`: accelerate the Rigidbody object. Uses $F.x \times \delta t$ </br> Always constrained to stay within the screen.
+
+- `void impulse(const Vector2D& i)`: add an impulse onto the Rigidbody object. Uses $\frac{F.x}{m}$ </br> Always constrained to stay within the screen.
+
+- `void move(const Vector2D& n_pos)`: move the Rigidbody object to a determined `Vector2D` position using LERP and a step of `0.1`. </br> Always constrained to stay within the screen.
+- `bool constraint(GameObject* n_go, const Vector2D& max, const Vector2D& min)`: constrain the Rigidbody object into the window of size `(max,min)`.
+    - **Returns**: `true` if it's within the constrains, else `false`
 
 ## 2D <a name="2d"></a>
 

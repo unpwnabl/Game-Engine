@@ -24,8 +24,8 @@ class Rigidbody {
 		void accelerate(const Vector2D& a);
 		void impulse(const Vector2D& i);
 		void move(const Vector2D& n_pos);
-
-		void constrain();
 };
+
+bool constraint(GameObject* n_go, const Vector2D& max, const Vector2D& min);
 
 #endif

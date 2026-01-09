@@ -38,7 +38,7 @@ int main() {
 	}
 	// Create the window
 	SDL_Window *window = NULL;
-	create_window(window, "Test", W_W, W_H);
+	create_window(window, "Test", 0, 0, W_W, W_H, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
 	// Create the renderer
 	SDL_Renderer *renderer;
 	create_renderer(window, renderer);
@@ -71,9 +71,7 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
-		player.rb->add_force(Vector2D(1, -2.0));
-		player.rb->constrain();
-
+		player.rb->accelerate(Vector2D(0, 0.98));
 		player.render();
 		
 		// Cap FPS

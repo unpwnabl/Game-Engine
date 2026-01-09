@@ -2,8 +2,8 @@
 #include "../../misc/include/log.hpp"
 #include "include/window.h"
 
-void create_window(SDL_Window*& window, const char* title, int x, int y, int width, int height) {
-	window = SDL_CreateWindow(title, x, y, width, height, SDL_WINDOW_SHOWN);
+void create_window(SDL_Window*& window, const char* title, int x, int y, int width, int height, Uint32 flags) {
+	window = SDL_CreateWindow(title, x, y, width, height, flags);
 
 	if (!window) {
 		sdl_error("window.cpp > Window couldn't be created");

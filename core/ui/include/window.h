@@ -7,7 +7,7 @@
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 540
 
-void create_window(SDL_Window*& window, const char* title, int x = SDL_WINDOWPOS_CENTERED, int y = SDL_WINDOWPOS_CENTERED, int width = SCREEN_WIDTH, int height = SCREEN_HEIGHT);
+void create_window(SDL_Window*& window, const char* title, int x = SDL_WINDOWPOS_CENTERED, int y = SDL_WINDOWPOS_CENTERED, int width = SCREEN_WIDTH, int height = SCREEN_HEIGHT, Uint32 flags = SDL_WINDOW_SHOWN);
 
 void destroy_window(SDL_Window*& window);
 
