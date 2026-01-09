@@ -1,8 +1,9 @@
 
 
+
 # Game Engine
 
-## Structure
+## Index
 
 - Core
 	- [UI](#ui)
@@ -20,6 +21,7 @@
 		- [Miscellaneous](#misc_src)
 			- [Resource Manager](#rm)
             - [GameObjects](#go)
+            - [Rigidbody](#rb)
 		- [2D](#2d)
 			- [Image](#image)
 			- [Button](#btn)
@@ -29,10 +31,11 @@
 	- Audio
 	- Images 
 - Platform
+- [Credits](#credits)
 
 ## Functionalities
 
-### UI <a name="ui"></a>
+## UI <a name="ui"></a>
 
 Everything concerning the User Interface such as the creation/destruction of windows, renderers, text, etc.. is here. 
 
@@ -61,7 +64,7 @@ Everything concerning the User Interface such as the creation/destruction of win
 The source directory has every component tied to the game engine itself.
 
 
-#### Miscellaneous <a name="misc_src"></a>
+## Miscellaneous <a name="misc_src"></a>
 
 #### Resource Manager <a name="rm"></a>
 
@@ -73,8 +76,7 @@ Each time an image is created, we use the resource manager to efficiently load i
 #### GameObjects <a name="go"></a>
 
 Game objects is an abstract class that defines objects inside the engine.
-- `GameObject::GameObject()`: incorrect usage of GameObject objects creation.
-    - **Returns**: `EXIT_FAILURE`
+
 - `GameObject::GameObject(const char* name, const Vector2D& pos, int w, int h, SDL_Renderer* renderer, SDL_Color color)`: creates a new GameObject object with a specific `name` at `(pos.x,pos.y)` with `w*h` dimensions. The object has a default color of `C_WHITE` if not provided
 - `GameObject::~GameObject()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
 
@@ -99,7 +101,27 @@ Then, the following methods are accessible:
 - `void set_image(Image&& image)`: set the GameObject object image using the move constructor. **More efficent**.
 - `GameObject::render()`: renders the `img` into the determined renderer (not the one of the GameObject object, but the one used in the creation of the image).
 
-#### 2D <a name="2d"></a>
+#### Rigidbody <a name="rb"></a>
+
+The Rigidbody is an abstract class that is responsible for physics simulation inside the game engine. Every [GameObject](#go) has a Rigidbody object attached. Since every Rigidbody is defined as a pointer inside the GameObject, to access its methods it needs the operator `->`
+
+- `Rigidbody::Rigidbody(GameObject* n_go, double n_mass = 0.0, double n_drag = 0.0) noexcept`: creates a new Rigidbody object with a specific `GameObject` with `mass` and `drag`
+- `Rigidbody::~Rigidbody()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
+
+Then, the following methods are accessible:
+- `void set_mass(double n_m)`: set the Rigidbody object mass.
+- `void set_drag(double n_d)`: set the Rigidbody object drag.
+- `const double get_mass() const`: get the Rigidbody object mass.
+	- **Returns**: a `const double` of the mass.
+- `const double get_drag() const`: get the Rigidbody object drag.
+	- **Returns**: a `const double` of the drag.
+- `void add_force(const Vector2D& f)`: add a force onto the Rigidbody object. Uses $\frac{F.x \times \delta t}{m}$
+- `void accelerate(const Vector2D& a)`: accelerate the Rigidbody object. Uses $F.x \times \delta t$
+- `void impulse(const Vector2D& i)`: add an impulse onto the Rigidbody object. Uses $\frac{F.x}{m}$
+- `void move(const Vector2D& n_pos)`: move the Rigidbody object to a determined `Vector2D` position using LERP and a step of `0.1`.
+- `void constrain()`: constrain the Rigidbody object into the window.
+
+## 2D <a name="2d"></a>
 
 2D graphics and utilities are here. 
 
@@ -124,7 +146,7 @@ Then, the following methods are accessible:
 - `SDL_Color get_color() const`: get the Image object color.
 	- **Returns**: a `SDL_Color`
 - `void Image::set_color(SDL_Color color)`: changes the image color to the RGBA value of `color`. 
-> When this texture is rendered, during the copy operation each source color channel is modulated by the appropriate color value according to the following formula: $src_C = src_C * (color / 255)$
+> When this texture is rendered, during the copy operation each source color channel is modulated by the appropriate color value according to the following formula: $src_C = src_C \times (color / 255)$
 - `SDL_Renderer* get_renderer() const`: get the Image object renderer.
 	- **Returns**: a `SDL_Renderer*`
 - `void Image::render(int x_pos, int y_pos)`: renders the image at a given position `(x_pos,y_pos)`. By default, they're set to the origin point, else to the set position.
@@ -182,6 +204,12 @@ The following operators:
 - `operator>(const Vector2D&, const Vector2D&)`
 	- **Returns**:	**true** if `x1 > x2` and `y1 > y2`
 								else **false**
+- `operator<=(const Vector2D&, const Vector2D&)`
+	- **Returns**:	**true** if `x1 <= x2` and `y1 <= y2`
+								else **false**
+- `operator>=(const Vector2D&, const Vector2D&)`
+	- **Returns**:	**true** if `x1 >= x2` and `y1 >= y2`
+								else **false**
 - `operator<<(std::ostream&, const Vector2D&)`
 	- **Returns**:	a `std::ostream&` object to print out.
 
@@ -196,7 +224,7 @@ And the following methods too:
 - `double angle2d(const Vector2D&, const Vector2D&)`: returns the angle between two vectors in degrees.
 	- **Returns**: angle in degrees as `double`
 
-#### 3D <a name="3d"></a>
+## 3D <a name="3d"></a>
 
 3D graphics and utilities are here. 
 
@@ -233,6 +261,12 @@ The following operators:
 - `operator>(const Vector3D&, const Vector3D&)`
 	- **Returns**:	**true** if `x1 > x2`, `y1 > y2` and `z1 > z2`
 								else **false**
+- `operator<=(const Vector3D&, const Vector3D&)`
+	- **Returns**:	**true** if `x1 <= x2`, `y1 <= y2` and `z1 <= z2`
+								else **false**
+- `operator>=(const Vector3D&, const Vector3D&)`
+	- **Returns**:	**true** if `x1 >= x2`, `y1 >= y2` and `z1 >= z2`
+								else **false**
 - `operator<<(std::ostream& const Vector3D&)`
 	- **Returns**:	a `std::ostream&` object to print out.
 
@@ -249,7 +283,7 @@ And the following methods too:
 - `double angle3d(const Vector3D&, const Vector3D&)`: returns the angle between two vectors in degrees.
 	- **Returns**: angle in degrees as `double`
 
-### Misc <a name="misc"></a>
+## Misc <a name="misc"></a>
 
 The functionalities that aren't specific to one field, and multi-purpose, are here. These include:
 
@@ -299,3 +333,6 @@ Methods:
 Every event that SDL captures is processed here.
 
 - `void event_handler(SDL_Window* window, bool& gameloop)`: captures events like mouse or window events to then work with them.
+
+## Credits <a name="credits"></a>
+The project and this wiki are updated and maintained by: [Unpwnabl](https://github.com/unpwnabl)
