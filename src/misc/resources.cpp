@@ -23,12 +23,8 @@ SDL_Surface* get_surface(const char* path) {
 		if (!surface) {
 			sdl_error("resources.cpp >");
 		}
-		message("Loaded image in memory");
 		map.insert(std::make_pair(path, surface));
 
-		for (auto const& i : map) {
-			std::cout << i.first << "->Surface" << std::endl;
-		}
 		return surface;
 	}
 }

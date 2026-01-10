@@ -12,14 +12,14 @@ To install, download all of the files from the [official github repository](http
 
 ## Run
 
-To run the program, use the Shell file `build.sh`.
+To run the program, use the Shell file `build.sh`. For help, use the option `./build.sh -h` or `./build.sh --help`.
 > This project requires [SDL2](https://www.libsdl.org) and its dependencies installed. Please refer to their page for more information. </br>
 It also requires [`make`](https://directory.fsf.org/wiki/Make) to build. </br>
 Many thirdparty elements are missing, such as fonts/images. They're WIP.
 
 ## Wiki
 
-For more informations, please refer to the [wiki](wiki.md).
+For more informations regarding functionalities, please refer to the [wiki](wiki.md).
 
 ## License
-This project is licensed under the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html)
+This project is licensed under the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html).

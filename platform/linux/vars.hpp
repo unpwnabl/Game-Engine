@@ -3,6 +3,6 @@
 
 #define W_W 960
 #define W_H 540
-#define MAX_FPS 120
+#define MAX_FPS 60
 
 #endif

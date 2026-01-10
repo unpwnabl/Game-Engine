@@ -10,6 +10,9 @@ class Rigidbody {
 		double mass;
 		double drag;
 		GameObject* go;
+		double g;
+		double weight;
+		Vector2D friction;
 	public:
 		Rigidbody();
 		Rigidbody(GameObject* n_go, double n_mass = 0.0, double n_drag = 0.0) noexcept;
@@ -22,6 +25,8 @@ class Rigidbody {
 		const double get_drag() const;
 		void add_force(const Vector2D& f);
 		void accelerate(const Vector2D& a);
+		void set_gravity(double g);
+		void fall();
 		void impulse(const Vector2D& i);
 		void move(const Vector2D& n_pos);
 };
