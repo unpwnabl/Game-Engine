@@ -77,10 +77,6 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
-		player.rb->fall();
-		player.rb->add_force(Vector2D(1, 0.9));
-		player.render();
-		
 		++frame;
 		if (frame / 4 >= 4) {
 			frame = 0;

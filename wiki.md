@@ -1,4 +1,4 @@
-# Game Engine
+# Game Engine Wiki
 
 ## Index
 
@@ -21,6 +21,7 @@
             - [Rigidbody](#rb)
 		- [2D](#2d)
 			- [Image](#image)
+			- [Spritesheet](#ss)
 			- [Button](#btn)
 			- [Vector2D](#vect2d)
 		- [3D](#3d)
@@ -74,28 +75,28 @@ Each time an image is created, we use the resource manager to efficiently load i
 
 Game objects is an abstract class that defines objects inside the engine.
 
-- `GameObject::GameObject(const char* name, const Vector2D& pos, int w, int h, SDL_Renderer* renderer, SDL_Color color)`: creates a new GameObject object with a specific `name` at `(pos.x,pos.y)` with `w*h` dimensions. The object has a default color of `C_WHITE` if not provided
-- `GameObject::~GameObject()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
+- `GameObject(const char* name, const Vector2D& pos, int w, int h, SDL_Renderer* renderer, SDL_Color color)`: creates a new GameObject object with a specific `name` at `(pos.x,pos.y)` with `w*h` dimensions. The object has a default color of `C_WHITE` if not provided
+- `~GameObject()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
 
 Then, the following methods are accessible:
-- `const char* get_name() const`: get the GameObject object name.
+- `const char* GameObject::get_name() const`: get the GameObject object name.
 	- **Returns**: a `const char*` array.
--  `void set_name(const char* n_n)`: set the GameObject object name,
-- `Vector2D get_pos() const`: get the GameObject object position.
+-  `void GameObject::set_name(const char* n_n)`: set the GameObject object name,
+- `Vector2D GameObject::get_pos() const`: get the GameObject object position.
 	- **Returns**: a `Vector2D` of the position.
-- `void set_pos(const Vector2D& n_pos)`: set the GameObject object position using a `Vector2D`.
-- `int get_width() const`: get the GameObject object width.
+- `void GameObject::set_pos(const Vector2D& n_pos)`: set the GameObject object position using a `Vector2D`.
+- `int GameObject::get_width() const`: get the GameObject object width.
 	- **Returns**: a `int` of the width.
-- `int get_height() const`: get the GameObject object height.
+- `int GameObject::get_height() const`: get the GameObject object height.
 	- **Returns**: a `int` of the width.
-- `void set_width(int n_w)`: set the GameObject object width.
-- `void set_height(int n_h)`: set the GameObject object height.
-- `Image& get_image()`: get the image alias.
+- `void GameObject::set_width(int n_w)`: set the GameObject object width.
+- `void GameObject::set_height(int n_h)`: set the GameObject object height.
+- `Image& GameObject::get_image()`: get the image alias.
 	- **Returns**: a `Image&` alias.
-- `const Image& get_image() const`: get the constant image alias, overrides the previous one if needed.
+- `const Image& GameObject::get_image() const`: get the constant image alias, overrides the previous one if needed.
 	- **Returns**: a `const Image&` alias.
-- `void set_image(const Image& image)`: set the GameObject object image using the copy constructor.
-- `void set_image(Image&& image)`: set the GameObject object image using the move constructor. **More efficent**.
+- `void GameObject::set_image(const Image& image)`: set the GameObject object image using the copy constructor.
+- `void GameObject::set_image(Image&& image)`: set the GameObject object image using the move constructor. **More efficent**.
 - `GameObject::render()`: renders the `img` into the determined renderer (not the one of the GameObject object, but the one used in the creation of the image).
 
 #### Rigidbody <a name="rb"></a>
@@ -106,18 +107,18 @@ The Rigidbody is an abstract class that is responsible for physics simulation in
 - `Rigidbody::~Rigidbody()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
 
 Then, the following methods are accessible:
-- `void set_mass(double n_m)`: set the Rigidbody object mass.
-- `void set_drag(double n_d)`: set the Rigidbody object drag.
-- `const double get_mass() const`: get the Rigidbody object mass.
+- `void Rigidbody::set_mass(double n_m)`: set the Rigidbody object mass.
+- `void Rigidbody::set_drag(double n_d)`: set the Rigidbody object drag.
+- `const double Rigidbody::get_mass() const`: get the Rigidbody object mass.
 	- **Returns**: a `const double` of the mass.
-- `const double get_drag() const`: get the Rigidbody object drag.
+- `const double Rigidbody::get_drag() const`: get the Rigidbody object drag.
 	- **Returns**: a `const double` of the drag.
-- `void add_force(const Vector2D& f)`: add a force onto the Rigidbody object. Uses $\frac{F.x \times \delta t}{m}$ </br> Always constrained to stay within the screen.
-- `void accelerate(const Vector2D& a)`: accelerate the Rigidbody object. Uses $F.x \times \delta t$ </br> Always constrained to stay within the screen.
+- `void Rigidbody::add_force(const Vector2D& f)`: add a force onto the Rigidbody object. Uses $\frac{F.x \times \delta t}{m}$ </br> Always constrained to stay within the screen.
+- `void Rigidbody::accelerate(const Vector2D& a)`: accelerate the Rigidbody object. Uses $F.x \times \delta t$ </br> Always constrained to stay within the screen.
 
-- `void impulse(const Vector2D& i)`: add an impulse onto the Rigidbody object. Uses $\frac{F.x}{m}$ </br> Always constrained to stay within the screen.
+- `void Rigidbody::impulse(const Vector2D& i)`: add an impulse onto the Rigidbody object. Uses $\frac{F.x}{m}$ </br> Always constrained to stay within the screen.
 
-- `void move(const Vector2D& n_pos)`: move the Rigidbody object to a determined `Vector2D` position using LERP and a step of `0.1`. </br> Always constrained to stay within the screen.
+- `void Rigidbody::move(const Vector2D& n_pos)`: move the Rigidbody object to a determined `Vector2D` position using LERP and a step of `0.1`. </br> Always constrained to stay within the screen.
 - `bool constraint(GameObject* n_go, const Vector2D& max, const Vector2D& min)`: constrain the Rigidbody object into the window of size `(max,min)`.
     - **Returns**: `true` if it's within the constrains, else `false`
 
@@ -128,28 +129,58 @@ Then, the following methods are accessible:
 #### Image <a name="image"></a>
 
 `Image` is the class that defines all images rendered onto the window. Every time a image is created, it uses a resource manager to see if it was already loaded into memory. If it's the first instance, it is added, otherwise it's loaded as-is. Each one can be created as such:
-- `Image::Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos int width, int height)`: instantiates a new Image object onto a given `render`, with the file located in `image_path` (all images are stored into `core/imgs`, a folder then copied into the build directory) at `(pos.x,pos.y)`. By default, `width` and `height` are set to the original image size, but if provided, the image is scaled accordingly.
+- `Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos int width, int height)`: instantiates a new Image object onto a given `render`, with the file located in `image_path` (all images are stored into `core/imgs`, a folder then copied into the build directory) at `(pos.x,pos.y)`. By default, `width` and `height` are set to the original image size, but if provided, the image is scaled accordingly.
 - `Image(const Image& img) noexcept`: copy constructor.
 - `Image(Image&& img) noexcept`: move constructor.
 - `Image::~Image()`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
 
 Then, the following methods are accessible:
-- `Vector2D get_pos() const`: get the Image object position.
+- `Vector2D Image::get_pos() const`: get the Image object position.
 	- **Returns**: a `Vector2D` of the position.
-- `void set_pos(const Vector2D& n_pos)`: set the Image object position using a `Vector2D`.
-- `int get_width() const`: get the Image object width.
+- `void Image::set_pos(const Vector2D& n_pos)`: set the Image object position using a `Vector2D`.
+- `int Image::get_width() const`: get the Image object width.
 	- **Returns**: a `int` of the width.
-- `int get_height() const`: get the Image object height.
+- `int Image::get_height() const`: get the Image object height.
 	- **Returns**: a `int` of the width.
-- `void set_width(int n_w)`: set the Image object width.
-- `void set_height(int n_h)`: set the Image object height.
-- `SDL_Color get_color() const`: get the Image object color.
+- `void Image::set_width(int n_w)`: set the Image object width.
+- `void Image::set_height(int n_h)`: set the Image object height.
+- `SDL_Color Image::get_color() const`: get the Image object color.
 	- **Returns**: a `SDL_Color`
 - `void Image::set_color(SDL_Color color)`: changes the image color to the RGBA value of `color`. 
 > When this texture is rendered, during the copy operation each source color channel is modulated by the appropriate color value according to the following formula: $src_C = src_C \times (color / 255)$
-- `SDL_Renderer* get_renderer() const`: get the Image object renderer.
+- `SDL_Renderer* Image::get_renderer() const`: get the Image object renderer.
 	- **Returns**: a `SDL_Renderer*`
 - `void Image::render(int x_pos, int y_pos)`: renders the image at a given position `(x_pos,y_pos)`. By default, they're set to the origin point, else to the set position.
+
+### Spritesheet <a name="ss"></a>
+
+`Spritesheet` is the class that defines spritesheet usage inside the game engine. When a path is specified, the corresponding image is loaded in memory, and partitioned using the  `x,y,w,h` dimensions provided as such:
+
+- `sprite.x = i * x`
+- `sprite.y = (i % frames) * y`
+- `sprite.w = w`
+- `sprite.h = h`
+
+To render the singular frames, just the index is needed (in a incremental order from the $1^{\text{st}}$ to the $n^{\text{th}}$) to reference it inside the vector that stores them.
+
+- `Spritesheet(SDL_Renderer* renderer, const char* n_path, const Vector2D& n_pos, int n_frames, int n_x, int n_y, int n_w, int n_h, SDL_Color n_color) noexcept`: creates a new Spritesheet object, using the image at `path`, rendering it at `pos`. The image is subdivided into `frames` frames, each having `(x,y)` position and `w*h` size (in the image, not the rendering screen). The  color is by default set to `C_WHITE`
+- `~Spritesheet() noexcept`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
+
+Then, the following methods are accessible:
+- `Vector2D Spritesheet::get_pos() const`: get the Spritesheet object position.
+	- **Returns**: a `Vector2D` of the position.
+- `void Spritesheet::set_pos(const Vector2D& n_pos)`: set the Spritesheet object position using a `Vector2D`.
+- `int Spritesheet::get_width() const`: get the Spritesheet object width.
+	- **Returns**: a `int` of the width.
+- `int Spritesheet::get_height() const`: get the Spritesheet object height.
+	- **Returns**: a `int` of the width.
+- `void Spritesheet::set_width(int n_w)`: set the Spritesheet object width.
+- `void Spritesheet::set_height(int n_h)`: set the Spritesheet object height.
+- `SDL_Color Spritesheet::get_color() const`: get the Spritesheet object color.
+	- **Returns**: a `SDL_Color`
+- `void Spritesheet::set_color(SDL_Color color)`: changes the spritesheet color to the RGBA value of `color`. 
+> When this texture is rendered, during the copy operation each source color channel is modulated by the appropriate color value according to the following formula: $src_C = src_C \times (color / 255)$
+- `void Spritesheet::render(int n_frames)`: renders the image at a given position `(pos.x,pos.x)` using the index `n_frames`
 
 #### Button <a name="btn"></a>
 
@@ -159,24 +190,24 @@ A simple `Button` UI object, derived from [`GameObject`](#gameobj). Each one can
 
 Then, the following methods are accessible:
 
-- `Vector2D get_pos() const`: get the Button object position.
+- `Vector2D Button::get_pos() const`: get the Button object position.
 	- **Returns**: a `Vector2D` of the position.
-- `void set_pos(const Vector2D& n_pos)`: set the Button object position using a `Vector2D`
-- `int get_width() const`: get the Button object width.
+- `void Button::set_pos(const Vector2D& n_pos)`: set the Button object position using a `Vector2D`
+- `int Button::get_width() const`: get the Button object width.
 	- **Returns**: a `int` of the width.
-- `int get_height() const`: get the Button object height.
+- `int Button::get_height() const`: get the Button object height.
 	- **Returns**: a `int` of the height.
-- `void set_width(int n_w)`: set the Button object width.
-- `void set_height(int n_h)`: set the Button object height.
-- `bool clicked() const`: get the Button object state.
+- `void Button::set_width(int n_w)`: set the Button object width.
+- `void Button::set_height(int n_h)`: set the Button object height.
+- `bool Button::clicked() const`: get the Button object state.
 	- **Returns**: `true` if the button is clicked, else `false`
 - `void render(TTF_Font* font, int scale = 10, SDL_Color color = C_WHITE) const`: render the `image` and the text using the `font` with size `scale` and color `color`.
 
 #### Vector2D <a name="vect2d"></a>
 
 `Vector2D` is a class that defines bi-dimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
-- `Vector2D::Vector2D()`: creates a `Vector2D(0.0, 0.0)`
-- `Vector2D::Vector2D(double x, double y)`: instantiates a new `Vector2D` object with `(x,y)`. 
+- `Vector2D()`: creates a `Vector2D(0.0, 0.0)`
+- `Vector2D(double x, double y)`: instantiates a new `Vector2D` object with `(x,y)`. 
 	- **Returns**: `Vector2D(x, y)`
 
 Then, the following data fields are accessible:
@@ -217,11 +248,11 @@ And the following methods too:
 
 - `double Vector2D::magnitude()`: returns the magnitude of the vector using the Pythagorean theorem.
 	- **Returns**: `double`
-- `Vector2D to_vect2d(const Vector3D&)`: transforms a Vector3D object to a Vector2D one.
+- `Vector2D Vector2D::to_vect2d(const Vector3D&)`: transforms a Vector3D object to a Vector2D one.
 	- **Returns**: `Vector2D`
-- `double dot2d(const Vector2D&, const Vector2D&)`: returns the dot product of two vectors as a scalar.
+- `double Vector2D::dot2d(const Vector2D&, const Vector2D&)`: returns the dot product of two vectors as a scalar.
 	- **Returns**: scalar as `double`
-- `double angle2d(const Vector2D&, const Vector2D&)`: returns the angle between two vectors in degrees.
+- `double Vector2D::angle2d(const Vector2D&, const Vector2D&)`: returns the angle between two vectors in degrees.
 	- **Returns**: angle in degrees as `double`
 
 ## 3D <a name="3d"></a>
@@ -231,8 +262,8 @@ And the following methods too:
 #### Vector3D <a name="vect3d"></a>
 
 `Vector3D` is a class that defines three-dimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
-- `Vector3D::Vector3D()`: creates a `Vector3D(0.0, 0.0, 0.0)`
-- `Vector3D::Vector3D(double x, double y, double z)`: instantiates a new `Vector3D` object with `(x,y,z)`. 
+- `Vector3D()`: creates a `Vector3D(0.0, 0.0, 0.0)`
+- `Vector3D(double x, double y, double z)`: instantiates a new `Vector3D` object with `(x,y,z)`. 
 	- **Returns**: `Vector3D(x, y, z)`
 
 Then, the following data fields are accessible:
@@ -274,13 +305,13 @@ And the following methods too:
 
 - `double Vector3D::magnitude()`: returns the magnitude of the vector using the Pythagorean theorem.
 	- **Returns**: `double`
-- `Vector3D to_vect3d(const Vector2D&)`: transforms a Vector2D object to a Vector3D one.
+- `Vector3D Vector3D::to_vect3d(const Vector2D&)`: transforms a Vector2D object to a Vector3D one.
 	- **Returns**: `Vector3D`
-- `double dot3d(const Vector3D&, const Vector3D&)`: returns the dot product of two vectors as a scalar.
+- `double Vector3D::dot3d(const Vector3D&, const Vector3D&)`: returns the dot product of two vectors as a scalar.
 	- **Returns**: scalar as `double`
-- `Vector3D cross3d(const Vector3D&, const Vector3D&)`: returns the cross product of two vectors as vector.
+- `Vector3D Vector3D::cross3d(const Vector3D&, const Vector3D&)`: returns the cross product of two vectors as vector.
 	- **Returns**: cross product as `Vector3D`
-- `double angle3d(const Vector3D&, const Vector3D&)`: returns the angle between two vectors in degrees.
+- `double Vector3D::angle3d(const Vector3D&, const Vector3D&)`: returns the angle between two vectors in degrees.
 	- **Returns**: angle in degrees as `double`
 
 ## Misc <a name="misc"></a>

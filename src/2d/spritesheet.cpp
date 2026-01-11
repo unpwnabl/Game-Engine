@@ -9,7 +9,7 @@
 #include "../../core/misc/include/log.hpp"
 #include "../../core/misc/include/colors.h"
 
-// https://lazyfoo.net/tutorials/SDL/14_animated_sprites_and_vsync/index.php
+// Thanks to https://lazyfoo.net/tutorials/SDL/14_animated_sprites_and_vsync/index.php for the explanation (and image)
 
 Spritesheet::Spritesheet(SDL_Renderer* renderer, const char* n_path, const Vector2D& n_pos, int n_frames, int n_x, int n_y, int n_w, int n_h, SDL_Color n_color) noexcept : ss_renderer(renderer), path(n_path), pos(n_pos), frames(n_frames), x(n_x), y(n_y), w(n_w), h(n_h), color(n_color) {
 	texture = SDL_CreateTextureFromSurface(ss_renderer, get_surface(path));
@@ -70,5 +70,6 @@ void Spritesheet::set_color(SDL_Color n_color) {
 } 
 
 void Spritesheet::render(int frame) const {
-	SDL_RenderCopy(ss_renderer, texture, NULL, &sprite_clips[frame]);
+	SDL_Rect clip = { (int)pos.x, (int)pos.y, sprite_clips[frame].w, sprite_clips[frame].h };
+	SDL_RenderCopy(ss_renderer, texture, &sprite_clips[frame], &clip);
 }
