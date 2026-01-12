@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 
-if [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "-h" ]] ; then
-	echo -e "Usage:\n\t./build.sh [options]\nGeneral options:\n\t-h, --help\t\t\tShow help\n\t-svexe\t\t\t\tCreate a dir/ folder with the exe\n\t\t\t\t\tand subsequent dependencies"
-	exit
+if [[ $# -ge 1 ]] ; then 
+	case "${1:-}" in
+		"--help" | "-h")
+			echo -e "Usage:\n\t./build.sh [options]\nGeneral options:\n\t-h, --help\t\t\tShow help\n\t-svexe\t\t\t\tCreate a dir/ folder with the exe\n\t\t\t\t\tand subsequent dependencies\n\t<no opts>\t\t\tJust build and run"
+			exit
+			;;
+		"-svexe")
+			;;
+		*)
+			echo -e "\033[0;31m[✗] Wrong argument passed, please use \"--help\" or \"-h\" to view help page\033[0m"
+			exit
+	esac
 fi
 
 clear
