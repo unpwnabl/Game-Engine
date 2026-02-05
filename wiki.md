@@ -113,10 +113,12 @@ Then, the following methods are accessible:
 	- **Returns**: a `const double` of the mass.
 - `const double Rigidbody::get_drag() const`: get the Rigidbody object drag.
 	- **Returns**: a `const double` of the drag.
-- `void Rigidbody::add_force(const Vector2D& f)`: add a force onto the Rigidbody object. Uses $\frac{F.x \times \delta t}{m}$ </br> Always constrained to stay within the screen.
-- `void Rigidbody::accelerate(const Vector2D& a)`: accelerate the Rigidbody object. Uses $F.x \times \delta t$ </br> Always constrained to stay within the screen.
+- `void Rigidbody::set_gravity(double n_g)`: set the Rigidbody object gravity. By default its 9,87.
+- `void Rigidbody::fall()`: makes the Rigidbody object susceptible to gravity.
+- `void Rigidbody::add_force(const Vector2D& f)`: add a force onto the Rigidbody object. Uses $\frac{F_x * \delta t}{m}$ </br> Always constrained to stay within the screen.
+- `void Rigidbody::accelerate(const Vector2D& a)`: accelerate the Rigidbody object. Uses $F_x * \delta t$ </br> Always constrained to stay within the screen.
 
-- `void Rigidbody::impulse(const Vector2D& i)`: add an impulse onto the Rigidbody object. Uses $\frac{F.x}{m}$ </br> Always constrained to stay within the screen.
+- `void Rigidbody::impulse(const Vector2D& i)`: add an impulse onto the Rigidbody object. Uses $\frac{F_x}{m}$ </br> Always constrained to stay within the screen.
 
 - `void Rigidbody::move(const Vector2D& n_pos)`: move the Rigidbody object to a determined `Vector2D` position using LERP and a step of `0.1`. </br> Always constrained to stay within the screen.
 - `bool constraint(GameObject* n_go, const Vector2D& max, const Vector2D& min)`: constrain the Rigidbody object into the window of size `(max,min)`.

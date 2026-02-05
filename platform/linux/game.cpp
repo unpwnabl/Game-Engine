@@ -55,8 +55,6 @@ int main() {
 	player.rb->set_mass(2.0);
 	player.rb->set_gravity(0.98);
 
-	Spritesheet ss(renderer, "imgs/spritesheet.png", Vector2D(200, 100), 4, 64, 0, 64, 205);
-
 	int frame = 0;
 
 	while (gameloop) {
@@ -77,11 +75,8 @@ int main() {
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
 
-		++frame;
-		if (frame / 4 >= 4) {
-			frame = 0;
-		}
-		ss.render(frame / 4);
+		player.rb->fall();
+		player.render();
 
 		// Cap FPS
 		cap(start, MAX_FPS, 1, renderer, roboto);
