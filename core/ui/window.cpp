@@ -1,0 +1,22 @@
+#include <SDL2/SDL.h>
+#include "../../misc/include/log.hpp"
+#include "include/window.h"
+
+void create_window(SDL_Window*& window, const char* title, int x, int y, int width, int height, Uint32 flags) {
+	window = SDL_CreateWindow(title, x, y, width, height, flags);
+
+	if (!window) {
+		sdl_error("window.cpp > Window couldn't be created");
+	}
+	message("Window has been created");
+	SDL_SetWindowResizable(window, SDL_FALSE);
+}
+
+void destroy_window(SDL_Window*& window) {
+	if (!window) {
+		warning("window.cpp > Window already destroyed...");
+	} else {
+		SDL_DestroyWindow(window);
+		window = NULL;
+	}
+}
