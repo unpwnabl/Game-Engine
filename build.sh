@@ -32,7 +32,7 @@ cmake ..
 cmake --build .
 cmake --build . --target run
 if [[ "${1:-}" == "-svexe" ]] ; then
-	echo -e "\033[0;33m[!] Creating permanent build inside dir/ \033[0m"
+	echo -e "\033[0;33m[!] Creating permanent build inside dist/ \033[0m"
 	cmake --build . --target bundle
 fi
 cmake --build . --target clean
