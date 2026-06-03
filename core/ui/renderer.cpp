@@ -16,11 +16,6 @@ void create_renderer(SDL_Window* window, SDL_Renderer*& renderer) {
 	SDL_RenderClear(renderer);
 }
 
-void render_rect(SDL_Renderer* renderer, SDL_Rect rect, SDL_Color color) {
-	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderDrawRect(renderer, &rect);
-}
-
 void renderer_update(SDL_Renderer* renderer) {
 	SDL_RenderPresent(renderer);
 }

@@ -1,3 +1,4 @@
+
 # Game Engine Wiki
 
 ## Index
@@ -21,6 +22,7 @@
             - [Rigidbody](#rb)
 		- [2D](#2d)
 			- [Image](#image)
+			- [Polygons](#poly)
 			- [Spritesheet](#ss)
 			- [Button](#btn)
 			- [Vector2D](#vect2d)
@@ -45,7 +47,6 @@ Everything concerning the User Interface such as the creation/destruction of win
 #### Renderer <a name="renderer"></a>
 
 - `void create_renderer(SDL_Window* window, SDL_Renderer*& renderer)`: creates a new renderer for the selected `window`, with `SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED` on.
-- `void render_rect(SDL_Renderer* renderer, SDL_Rect rect, SDL_Color color)`: renders a rectangle on a specified `renderer`, with a determined color. 
 - `void renderer_update(SDL_Renderer* renderer)`: updated the renderer on each frame.
 - `void renderer_clear(SDL_Renderer* renderer)`: clears the renderer on each frame.
 - `void destroy_renderer(SDL_Renderer*& renderer)`: destroys the given `renderer` and deals with the clean up of memory.
@@ -153,6 +154,12 @@ Then, the following methods are accessible:
 - `SDL_Renderer* Image::get_renderer() const`: get the Image object renderer.
 	- **Returns**: a `SDL_Renderer*`
 - `void Image::render(int x_pos, int y_pos)`: renders the image at a given position `(x_pos,y_pos)`. By default, they're set to the origin point, else to the set position.
+
+### Polygons <a name="poly"></a>
+Polygons are 2d shapes rendered automatically by SDL2, but I've built a wrapper around each function to better suit my tastes. The current polygons are:
+- `void rect(SDL_Renderer* renderer, Vector2D position, int width, int height, bool filled = false, SDL_Color forecolor = C_WHITE)`: renders a rectangle on a specified `renderer`, with a determined color `forecolor` (it's `C_WHITE` if left default). If `filled` is true, then the rectangle is rendered filled with the forecolor.
+- `void point(SDL_Renderer* renderer, Vector2D position SDL_Color forecolor = C_WHITE)`: renders a rectangle on a specified `renderer`, with a determined color `forecolor` (it's `C_WHITE` if left default).
+- `void line(SDL_Renderer* renderer, Vector2D position_1, Vector2D position_2, SDL_Color forecolor = C_WHITE)`: renders a line on a specified `renderer`, from `(position_1.x, position_1.y)` to `(position_2.x, position_2.y)` with a determined color `forecolor` (it's `C_WHITE` if left default).
 
 ### Spritesheet <a name="ss"></a>
 

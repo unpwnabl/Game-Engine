@@ -20,6 +20,7 @@
 #include "../../core/ui/include/text.h"
 #include "../../core/ui/include/font_paths.hpp"
 #include "../../src/2d/include/image.h"
+#include "../../src/2d/include/polygons.h"
 #include "../../src/2d/include/spritesheet.h"
 #include "../../src/2d/include/button.h"
 #include "../../src/2d/include/vector2d.hpp"
@@ -65,12 +66,11 @@ int main() {
 		// Clear previous frame
 		renderer_clear(renderer);
 
-		SDL_Rect rect;
-		rect.x = 600;
-		rect.y = 300;
-		rect.w = 50;
-		rect.h = 50;
-		render_rect(renderer, rect, C_RED);
+		rect(renderer, Vector2D(600, 300), 50, 50, C_RED);
+
+		point(renderer, Vector2D(625, 325));
+
+		line(renderer, Vector2D(600, 200), Vector2D(650, 250));
 
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
