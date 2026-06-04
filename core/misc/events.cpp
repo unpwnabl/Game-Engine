@@ -11,11 +11,11 @@ void event_handler(SDL_Window* window, bool& gl) {
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
 			// Mouse click
-			clicked(event.button);
+			mouse_clicked(event.button);
 			// std::cout << "Mouse clicked at: " << click.x << ", " << click.y << std::endl;
 		} else if (event.type == SDL_MOUSEMOTION) {
 			// Mouse motion
-			get_position(event.motion);
+			get_mouse_position(event.motion);
 			// std::cout << "Mouse moved to: " << position.x << ", " << position.y << std::endl;
 		}
 		// Exit

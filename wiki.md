@@ -1,5 +1,6 @@
 
 
+
 # Game Engine Wiki
 
 ## Index
@@ -26,10 +27,10 @@
 			- [Image](#image)
 			- [Polygons](#poly)
 			- [Spritesheet](#ss)
-			- [Button](#btn)
 			- [Vector2D](#vect2d)
 		- [3D](#3d)
 			- [Vector3D](#vect3d)
+			- [Solids](#solids)
 	- Audio
 	- Images 
 - Platform
@@ -193,27 +194,6 @@ Then, the following methods are accessible:
 > When this texture is rendered, during the copy operation each source color channel is modulated by the appropriate color value according to the following formula: $src_C = src_C \times (color / 255)$
 - `void Spritesheet::render(int n_frames)`: renders the image at a given position `(pos.x,pos.x)` using the index `n_frames`
 
-### Button <a name="btn"></a>
-
-A simple `Button` UI object, derived from [`GameObject`](#gameobj). Each one can be created as such:
-- `Button(const char* txt, const Vector2D& pos, int width, int height, const Image& image) noexcept`: creates a button that will display the `txt` at `(pos.x,pos.y)` with size `width*height`, using the `image` as sprite.
-- `~Button() noexcept`: deconstructor, deals with the clean up of memory. Will be called automatically when the program closes.
-
-Then, the following methods are accessible:
-
-- `Vector2D Button::get_pos() const`: get the Button object position.
-	- **Returns**: a `Vector2D` of the position.
-- `void Button::set_pos(const Vector2D& n_pos)`: set the Button object position using a `Vector2D`
-- `int Button::get_width() const`: get the Button object width.
-	- **Returns**: a `int` of the width.
-- `int Button::get_height() const`: get the Button object height.
-	- **Returns**: a `int` of the height.
-- `void Button::set_width(int n_w)`: set the Button object width.
-- `void Button::set_height(int n_h)`: set the Button object height.
-- `bool Button::clicked() const`: get the Button object state.
-	- **Returns**: `true` if the button is clicked, else `false`
-- `void render(TTF_Font* font, int scale = 10, SDL_Color color = C_WHITE) const`: render the `image` and the text using the `font` with size `scale` and color `color`.
-
 ### Vector2D <a name="vect2d"></a>
 
 `Vector2D` is a class that defines bi-dimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
@@ -325,6 +305,41 @@ And the following methods too:
 - `double Vector3D::angle3d(const Vector3D&, const Vector3D&)`: returns the angle between two vectors in degrees.
 	- **Returns**: angle in degrees as `double`
 
+### Solids <a name="solids"></a>
+Solids are 3-dimensional objects that are useful for 3d game graphics. Currently, there are:
+
+#### Cube
+
+`Cube` is a class that defines three-dimensional cubes, and their core functionalities.
+- `Cube(SDL_Renderer* renderer, const Vector3D& position double x, int width, int height, int depth, float angle = 0, SDL_Color color = C_WHITE)`: instantiates a new `Cube` object at `(x,y,z)` with size `width * height * depth` at a specific `angle`. Default color is `C_WHITE` 
+
+The following operators:
+
+- `Cube operator=(const Cube& c) noexcept` and  `Cube operator=(Cube&& c) noexcept`: assign a `Cube` object proprieties to another `Cube` object.
+
+And the following methods too:
+
+Then, the following methods are accessible:
+- `Vector3D Cube::get_pos() const`: get the Cube object position.
+	- **Returns**: a `Vector2D` of the position.
+- `void Cube::set_pos(const Vector3D& n_pos)`: set the Cube object position using a `Vector3D`.
+- `int Cube::get_width() const`: get the Cube object width.
+	- **Returns**: a `int` of the width.
+- `int Cube::get_height() const`: get the Cube object height.
+- `int Cube::get_depth() const`: get the Cube object depth.
+	- **Returns**: a `int` of the width.
+- `void Cube::set_width(int n_w)`: set the Cube object width.
+- `void Cube::set_height(int n_h)`: set the Cube object height.
+- `int Cube::set_depth() const`: set the Cube object depth.
+- `SDL_Color Cube::get_color() const`: get the Cube object color.
+	- **Returns**: a `SDL_Color`
+- `void SpritCubeesheet::set_color(SDL_Color color)`: changes the Cube color to the RGBA value of `color`. 
+- `void Cube::render()`: renders the Cube using [orthographic projection](https://en.wikipedia.org/wiki/Orthographic_projection).
+- `void Cube::rotate_x(float speed)`: rotates the Cube object along the X axis at a set `speed` Uses a [rotation matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
+- `void Cube::rotate_y(float speed)`: rotates the Cube object along the Y axis at a set `speed` Uses a [rotation matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
+- `int Cube::rotate_z(float speed)`: rotates the Cube object along the Z axis at a set `speed` Uses a [rotation matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
+
+
 ## Misc <a name="misc"></a>
 
 The functionalities that aren't specific to one field, and multi-purpose, are here. These include:
@@ -353,14 +368,14 @@ Uses the [ANSI escape code sequence](https://en.wikipedia.org/wiki/ANSI_escape_c
 ### Matrix <a name="mat"></a>
 
 Matrices are used to determine positions and to project 3-dimensional object onto a 2-dimensional screen for 3D rendering (to be done). Matrices are built around `float` values, and these functions only work with that type:
-- `void print_matrix2d(float* matrix, int rows, int columns)`: prints to the screen the `n_rows x n_cols` and the values inside the 2D matrix.
-- `float* matrix2d_sum(float* matrix_1, float* matrix_2, int rows, int columns)`: does the sum of two matrices:
+- `void print_matrix(float* matrix, int rows, int columns)`: prints to the screen the `n_rows x n_cols` and the values inside the 2D matrix.
+- `float* matrix_sum(float* matrix_1, float* matrix_2, int rows, int columns)`: does the sum of two matrices:
 $\begin{bmatrix} a&b\\c&d \end{bmatrix}+\begin{bmatrix} e&f\\g&h \end{bmatrix}=\begin{bmatrix} a+e&b+f\\c+g&d+h \end{bmatrix}$
 > There is no check if the two matrices are the same size. Please keep in mind when using.
 
-- `float* matrix2d_scale(float* m, int r, int c, float scalar)`: scales the matrix using a scalar:
+- `float* matrix_scale(float* m, int r, int c, float scalar)`: scales the matrix using a scalar:
 $\begin{bmatrix} a&b\\c&d \end{bmatrix}\times s=\begin{bmatrix} a\times s&b\times s\\c\times s&d\times s\end{bmatrix}$
-- `float* matrix2d_mult(float* m1, int r1, int c1, float* m2, int r2, int c2)`: multiplies two matrices together. A check is done to see if they are compatible, else a `nullptr` is returned. For better visualization, I suggest going [here](http://matrixmultiplication.xyz/)
+- `float* matrix_mult(float* m1, int r1, int c1, float* m2, int r2, int c2)`: multiplies two matrices together. A check is done to see if they are compatible, else a `nullptr` is returned. For better visualization, I suggest going [here](http://matrixmultiplication.xyz/)
 - `float* vect2d_to_matrix(Vector2D v)`: transforms a `Vector2D` object to a `float` matrix.
 - `Vector2D matrix_to_vect2d(float* m, int r, int c)`: transforms a `float` matrix to a  `Vector2D` object.
 

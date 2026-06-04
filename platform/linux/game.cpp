@@ -23,9 +23,9 @@
 #include "../../src/2d/include/image.h"
 #include "../../src/2d/include/polygons.h"
 #include "../../src/2d/include/spritesheet.h"
-#include "../../src/2d/include/button.h"
 #include "../../src/2d/include/vector2d.hpp"
 #include "../../src/3d/include/vector3d.hpp"
+#include "../../src/3d/include/solids.h"
 #include "../../src/misc/include/gameobj.h"
 #include "../../src/misc/include/rigidbody.h"
 
@@ -51,11 +51,7 @@ int main() {
 	// Initialize image manager
 	init_img(IMG_INIT_PNG);
 
-	Image sprite(renderer, "imgs/test.png", Vector2D(100, 100), 100, 100);
-	sprite.set_color(C_WHITE);
-	GameObject player("player", Vector2D(100, 100), 100, 75, std::move(sprite));
-	player.rb->set_mass(2.0);
-	player.rb->set_gravity(0.98);
+	Cube box(renderer, Vector3D(150, 150, 50), 100, 100, 100);
 
 	while (gameloop) {
 		// Start counting ticks
@@ -65,17 +61,11 @@ int main() {
 		// Clear previous frame
 		renderer_clear(renderer);
 
-		rect(renderer, Vector2D(600, 300), 50, 50, C_RED);
 
-		point(renderer, Vector2D(625, 325));
-
-		line(renderer, Vector2D(600, 300), Vector2D(650, 350));
-
-		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
-		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);
-
-		player.rb->fall();
-		player.render();
+		box.rotate_x(0.03);
+		//box.rotate_y(0.03);
+		//box.rotate_z(0.03);
+		box.render();
 
 		// Cap FPS
 		cap(start, MAX_FPS, 1, renderer, roboto);

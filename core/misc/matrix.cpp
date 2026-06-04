@@ -2,11 +2,12 @@
 
 #include "include/matrix.hpp"
 #include "../../src/2d/include/vector2d.hpp"
+#include "../../src/3d/include/vector3d.hpp"
 
 // Thanks to Daniel Shiffman for the inspirations for the functions and explanations.
 // See more here: https://www.youtube.com/watch?v=tzsgS19RRc8
 
-void print_matrix2d(float* m, int r, int c) {
+void print_matrix(float* m, int r, int c) {
 	std::cout << r << " x " <<  c << std::endl;
 	for (int i = 0; i < r; i++) {
 		for (int j = 0; j < c; j++) {
@@ -17,7 +18,7 @@ void print_matrix2d(float* m, int r, int c) {
 	std::cout << std::endl;
 }
 
-float* matrix2d_sum(float* m1, float* m2, int r, int c) {
+float* matrix_sum(float* m1, float* m2, int r, int c) {
 	// Initialize new float 2D array with 0 with dimensions r x c
 	float* result = new float[r * c]{0};
 
@@ -30,7 +31,7 @@ float* matrix2d_sum(float* m1, float* m2, int r, int c) {
 	return result;
 }
 
-float* matrix2d_scale(float* m, int r, int c, float scalar) {
+float* matrix_scale(float* m, int r, int c, float scalar) {
 	// Initialize new float 2D array with 0 with dimensions r x c
 	float* result = new float[r * c]{0};
 
@@ -43,7 +44,7 @@ float* matrix2d_scale(float* m, int r, int c, float scalar) {
 	return result;
 }
 
-float* matrix2d_mult(float* m1, int r1, int c1, float* m2, int r2, int c2) {
+float* matrix_mult(float* m1, int r1, int c1, float* m2, int r2, int c2) {
 	if (c1 != r2) {
 		std::cout << "[X] Matrices have incompatible numers of rows and columns" << std::endl;
 		return nullptr;
@@ -80,6 +81,27 @@ Vector2D matrix_to_vect2d(float* m, int r, int c) {
 	Vector2D result;
 	result.x = *((m + 0 * c) + 0);
 	result.y = *((m + 1 * c) + 0);
+
+	return result;
+}
+
+float* vect3d_to_matrix(Vector3D v) {
+	// Initialize new float 2D array with 0 with dimensions 2 x 1
+	float* result = new float[3 * 1]{0};
+	*((result + 0 * 1) + 0) = v.x;
+	*((result + 1 * 1) + 0) = v.y;
+	*((result + 2 * 1) + 0) = v.z;
+
+	return result;
+}
+
+Vector3D matrix_to_vect3d(float* m, int r, int c) {
+	Vector3D result;
+	result.x = *((m + 0 * c) + 0);
+	result.y = *((m + 1 * c) + 0);
+	if (r > 2) {
+		result.z = *((m + 2 * c) + 0);
+	}
 
 	return result;
 }

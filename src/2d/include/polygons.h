@@ -12,4 +12,6 @@ void point(SDL_Renderer* renderer, Vector2D pos, SDL_Color fcolor = C_WHITE);
 
 void line(SDL_Renderer* renderer, Vector2D pos1, Vector2D pos2, SDL_Color fcolor = C_WHITE);
 
+void connect(SDL_Renderer* renderer, Vector2D point1, Vector2D point2, SDL_Color fcolor = C_WHITE);
+
 #endif

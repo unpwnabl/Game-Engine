@@ -27,3 +27,7 @@ void line(SDL_Renderer* renderer, Vector2D pos1, Vector2D pos2, SDL_Color fcolor
 	SDL_SetRenderDrawColor(renderer, fcolor.r, fcolor.g, fcolor.b, fcolor.a);
 	SDL_RenderDrawLine(renderer, pos1.x, pos1.y, pos2.x, pos2.y);
 }
+
+void connect(SDL_Renderer* renderer, Vector2D point1, Vector2D point2, SDL_Color fcolor) {
+	line(renderer, point1, point2, fcolor);
+}
