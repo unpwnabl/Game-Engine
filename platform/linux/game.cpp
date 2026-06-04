@@ -15,6 +15,7 @@
 #include "../../core/misc/include/fps.h"
 #include "../../core/misc/include/mouse.h"
 #include "../../core/misc/include/events.h"
+#include "../../core/misc/include/matrix.hpp"
 #include "../../core/ui/include/window.h"
 #include "../../core/ui/include/renderer.h"
 #include "../../core/ui/include/text.h"
@@ -56,8 +57,6 @@ int main() {
 	player.rb->set_mass(2.0);
 	player.rb->set_gravity(0.98);
 
-	int frame = 0;
-
 	while (gameloop) {
 		// Start counting ticks
 		Uint64 start = SDL_GetTicks();
@@ -70,7 +69,7 @@ int main() {
 
 		point(renderer, Vector2D(625, 325));
 
-		line(renderer, Vector2D(600, 200), Vector2D(650, 250));
+		line(renderer, Vector2D(600, 300), Vector2D(650, 350));
 
 		render_text(renderer, "Game Engine", roboto, W_W / 2 - 50, W_H / 2 - 50, 25, C_WHITE);
 		render_text(renderer, "made by: Unpwnabl", roboto, W_W / 2 - 25, W_H / 2 - 25, 12, C_WHITE);

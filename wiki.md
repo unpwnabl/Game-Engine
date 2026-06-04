@@ -1,4 +1,5 @@
 
+
 # Game Engine Wiki
 
 ## Index
@@ -12,6 +13,7 @@
 		- [Split](#split)
 		- [FPS](#fps)
 		- [Log](#log)
+		- [Matrix](#mat)
 		- [Colors](#colors)
 		- [Mouse](#mouse)
 		- [Event Handler](#eh)
@@ -39,19 +41,19 @@
 
 Everything concerning the User Interface such as the creation/destruction of windows, renderers, text, etc.. is here. 
 
-#### Window <a name="window"></a>
+### Window <a name="window"></a>
 
 - `void create_window(SDL_Window*& window, const char* title, int x, int y, int width, int height)`: creates a window, with title `title`, of size `w`\*`h` at (`x,y`). By default, `x` and `y` are `SDL_WINDOWPOS_CENTERED`, and size is 960\*540.
 - `void destroy_window(SDL_Window*& window)`: destroys the `window` and deals with the clean up of memory.
 
-#### Renderer <a name="renderer"></a>
+### Renderer <a name="renderer"></a>
 
 - `void create_renderer(SDL_Window* window, SDL_Renderer*& renderer)`: creates a new renderer for the selected `window`, with `SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED` on.
 - `void renderer_update(SDL_Renderer* renderer)`: updated the renderer on each frame.
 - `void renderer_clear(SDL_Renderer* renderer)`: clears the renderer on each frame.
 - `void destroy_renderer(SDL_Renderer*& renderer)`: destroys the given `renderer` and deals with the clean up of memory.
 
-#### Text <a name="text"></a>
+### Text <a name="text"></a>
 
 - `void init_ttf()`: initializes the `SDL_ttf` library. Also, opens a dummy font to check if everything works correctly, and immediately closes it.
 - `void render_text(SDL_Renderer* renderer, const char* s, TTF_Font *font, int x, int y, int scale, SDL_Color fore)`: renders text `s` into the given `renderer`, using the `font` at the position (`x,y`) with size `scale` and color `fore`.
@@ -65,14 +67,14 @@ The source directory has every component tied to the game engine itself.
 
 ## Miscellaneous <a name="misc_src"></a>
 
-#### Resource Manager <a name="rm"></a>
+### Resource Manager <a name="rm"></a>
 
 Each time an image is created, we use the resource manager to efficiently load into memory the appropriate texture by checking an [unordered map](https://en.cppreference.com/w/cpp/container/unordered_map.html), which key is the file path. If found, it returns the texture, otherwise it's created from scratch and then added to the map.
 - `SDL_Texture* get_texture(SDL_Renderer* renderer, const char* path)`: returns the texture if found, otherwise creates a new one.
 	- **Returns**: appropriate `SDL_Texture*`
 - `void remove_texture()`: removes a texture from the map.
 
-#### GameObjects <a name="go"></a>
+### GameObjects <a name="go"></a>
 
 Game objects is an abstract class that defines objects inside the engine.
 
@@ -100,7 +102,7 @@ Then, the following methods are accessible:
 - `void GameObject::set_image(Image&& image)`: set the GameObject object image using the move constructor. **More efficent**.
 - `GameObject::render()`: renders the `img` into the determined renderer (not the one of the GameObject object, but the one used in the creation of the image).
 
-#### Rigidbody <a name="rb"></a>
+### Rigidbody <a name="rb"></a>
 
 The Rigidbody is an abstract class that is responsible for physics simulation inside the game engine. Every [GameObject](#go) has a Rigidbody object attached. Since every Rigidbody is defined as a pointer inside the GameObject, to access its methods it needs the operator `->`
 
@@ -129,7 +131,7 @@ Then, the following methods are accessible:
 
 2D graphics and utilities are here. 
 
-#### Image <a name="image"></a>
+### Image <a name="image"></a>
 
 `Image` is the class that defines all images rendered onto the window. Every time a image is created, it uses a resource manager to see if it was already loaded into memory. If it's the first instance, it is added, otherwise it's loaded as-is. Each one can be created as such:
 - `Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos int width, int height)`: instantiates a new Image object onto a given `render`, with the file located in `image_path` (all images are stored into `core/imgs`, a folder then copied into the build directory) at `(pos.x,pos.y)`. By default, `width` and `height` are set to the original image size, but if provided, the image is scaled accordingly.
@@ -191,7 +193,7 @@ Then, the following methods are accessible:
 > When this texture is rendered, during the copy operation each source color channel is modulated by the appropriate color value according to the following formula: $src_C = src_C \times (color / 255)$
 - `void Spritesheet::render(int n_frames)`: renders the image at a given position `(pos.x,pos.x)` using the index `n_frames`
 
-#### Button <a name="btn"></a>
+### Button <a name="btn"></a>
 
 A simple `Button` UI object, derived from [`GameObject`](#gameobj). Each one can be created as such:
 - `Button(const char* txt, const Vector2D& pos, int width, int height, const Image& image) noexcept`: creates a button that will display the `txt` at `(pos.x,pos.y)` with size `width*height`, using the `image` as sprite.
@@ -212,7 +214,7 @@ Then, the following methods are accessible:
 	- **Returns**: `true` if the button is clicked, else `false`
 - `void render(TTF_Font* font, int scale = 10, SDL_Color color = C_WHITE) const`: render the `image` and the text using the `font` with size `scale` and color `color`.
 
-#### Vector2D <a name="vect2d"></a>
+### Vector2D <a name="vect2d"></a>
 
 `Vector2D` is a class that defines bi-dimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
 - `Vector2D()`: creates a `Vector2D(0.0, 0.0)`
@@ -268,7 +270,7 @@ And the following methods too:
 
 3D graphics and utilities are here. 
 
-#### Vector3D <a name="vect3d"></a>
+### Vector3D <a name="vect3d"></a>
 
 `Vector3D` is a class that defines three-dimensional vectors, and their core functionalities. It uses doubles to represent accurately points on the canvas.
 - `Vector3D()`: creates a `Vector3D(0.0, 0.0, 0.0)`
@@ -327,17 +329,17 @@ And the following methods too:
 
 The functionalities that aren't specific to one field, and multi-purpose, are here. These include:
 
-#### Split <a name="split"></a>
+### Split <a name="split"></a>
 
 - `std::vector<const char*> split(const char* s, size_t max_len)`: splits an array of characters `s` into chunks to fit a set maximum length.
 	- **Returns**: an `std::vector` of `const char*` containing all of the lines split to fit the maximum length.
 - `void free_chunks(std::vector<const char*>& chunks)`: since `split()` uses `malloc()`, this function frees the occupied memory.
 
-#### FPS <a name="fps"></a>
+### FPS <a name="fps"></a>
 
 - `void cap(Uint64 start, int max, int show = 0, SDL_Renderer* renderer = NULL, TTF_Font* font = NULL)`: caps the frame-per-second rate at a determined `max`. In `main()`, the variable `Uint64 start` keeps track of time, then is used to cap the FPS. If `show > 0` and the rest of the fields are given, a green text displaying the FPS rate is shown in the window.
 
-#### Log <a name="log"></a>
+### Log <a name="log"></a>
 
 Uses the [ANSI escape code sequence](https://en.wikipedia.org/wiki/ANSI_escape_code) to print the text in various colors.
 - `void sdl_error(const char* s)`: prints a red underlined error message, followed by `SDL_GetError()` and stops execution.
@@ -348,12 +350,26 @@ Uses the [ANSI escape code sequence](https://en.wikipedia.org/wiki/ANSI_escape_c
 - `void success(const char* s)`: prints a green message.
 - `void message(const char* s)`: prints a grey message.
 
-#### Colors <a name="colors"></a>
+### Matrix <a name="mat"></a>
+
+Matrices are used to determine positions and to project 3-dimensional object onto a 2-dimensional screen for 3D rendering (to be done). Matrices are built around `float` values, and these functions only work with that type:
+- `void print_matrix2d(float* matrix, int rows, int columns)`: prints to the screen the `n_rows x n_cols` and the values inside the 2D matrix.
+- `float* matrix2d_sum(float* matrix_1, float* matrix_2, int rows, int columns)`: does the sum of two matrices:
+$\begin{bmatrix} a&b\\c&d \end{bmatrix}+\begin{bmatrix} e&f\\g&h \end{bmatrix}=\begin{bmatrix} a+e&b+f\\c+g&d+h \end{bmatrix}$
+> There is no check if the two matrices are the same size. Please keep in mind when using.
+
+- `float* matrix2d_scale(float* m, int r, int c, float scalar)`: scales the matrix using a scalar:
+$\begin{bmatrix} a&b\\c&d \end{bmatrix}\times s=\begin{bmatrix} a\times s&b\times s\\c\times s&d\times s\end{bmatrix}$
+- `float* matrix2d_mult(float* m1, int r1, int c1, float* m2, int r2, int c2)`: multiplies two matrices together. A check is done to see if they are compatible, else a `nullptr` is returned. For better visualization, I suggest going [here](http://matrixmultiplication.xyz/)
+- `float* vect2d_to_matrix(Vector2D v)`: transforms a `Vector2D` object to a `float` matrix.
+- `Vector2D matrix_to_vect2d(float* m, int r, int c)`: transforms a `float` matrix to a  `Vector2D` object.
+
+### Colors <a name="colors"></a>
 
 Uses `SDL_Color` to define colors. </br>
 Every color is RGBA, with  `Uint8 C_WHITE.r`, `Uint8 C_WHITE.g`, `Uint8 C_WHITE.b` and `Uint8 C_WHITE.a`. Alpha is by default set at 255.
 
-#### Mouse <a name="mouse"></a>
+### Mouse <a name="mouse"></a>
 
 Accessible data fields:
 - `Vector2D position`: a vector that holds the mouse X and Y positions updated every frame.
@@ -368,7 +384,7 @@ Methods:
 - `Vector2D clicked(SDL_MouseButtonEvent& event)`: gets the coordinates where a mouse button was pressed, and stores them in a vector.
 	- **Returns**: a `Vector2D` with the coordinates.
 
-#### Event Handler <a name="eh"></a>
+### Event Handler <a name="eh"></a>
 
 Every event that SDL captures is processed here.
 
