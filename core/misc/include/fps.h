@@ -7,6 +7,6 @@
 extern float delta_time;
 
 float calculate_time(Uint64 start);
-void cap(Uint64 start, int max, int show = 0, SDL_Renderer *renderer = NULL, TTF_Font *font = NULL);
+void cap(Uint64 start, int max, bool show = false, SDL_Renderer *renderer = NULL, TTF_Font *font = NULL);
 
 #endif

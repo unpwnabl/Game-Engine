@@ -120,21 +120,48 @@ void Cube::render() {
 	points[6] = Vector3D(position.x + w, position.y - h, position.z - d);
 	points[7] = Vector3D(position.x, position.y - h, position.z - d);
 
-	auto projected_cube = new Vector3D[n_points];
+	Vector3D* projected_cube = new Vector3D[n_points];
+
+	// Calculate center of cube
+	Vector3D center = Vector3D(
+			position.x + w / 2,
+			position.y - h / 2,
+			position.z - d / 2
+	);
 
 	// Render points
 	for (int i = 0; i < n_points; i++) {
+		// Translate cube to center
+		Vector3D translated = Vector3D(
+				points[i].x - center.x,
+				points[i].y - center.y,
+				points[i].z - center.z
+		);
+
+		// Rotate cube
 		float* rotated_matrix = matrix_mult(
 				(float*)rotation_matrix, 
 				3, 3, 
-				(float*)vect3d_to_matrix(points[i]), 
+				(float*)vect3d_to_matrix(translated), 
 				3, 1);
 		Vector3D rotated_v = matrix_to_vect3d((float*)rotated_matrix, 3, 1);
-		
-		float* projected_matrix = matrix_mult((float*)projection_matrix, 2, 3, (float*)vect3d_to_matrix(rotated_v), 3, 1);
+
+		// Retranslate cube to absolute
+		Vector3D rerotated_v = Vector3D(
+				rotated_v.x + center.x,
+				rotated_v.y + center.y,
+				rotated_v.z + center.z
+		);
+
+		// Project cube
+		float* projected_matrix = matrix_mult(
+				(float*)projection_matrix, 
+				2, 3, 
+				(float*)vect3d_to_matrix(rerotated_v), 
+				3, 1);
 		Vector3D final = matrix_to_vect3d((float*)projected_matrix, 2, 1);
+		
 		projected_cube[i] = final;
-		// point(renderer, Vector2D(final.x, final.y), color);
 	}
 
 	// Render edges
@@ -152,7 +179,6 @@ void Cube::render() {
 				Vector2D(projected_cube[(i + 4)].x, projected_cube[(i + 4)].y)
 		);
 	}
-
 }
 
 void Cube::rotate_x(float speed) {

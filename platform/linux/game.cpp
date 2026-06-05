@@ -51,8 +51,6 @@ int main() {
 	// Initialize image manager
 	init_img(IMG_INIT_PNG);
 
-	Cube box(renderer, Vector3D(150, 150, 50), 100, 100, 100);
-
 	while (gameloop) {
 		// Start counting ticks
 		Uint64 start = SDL_GetTicks();
@@ -62,13 +60,8 @@ int main() {
 		renderer_clear(renderer);
 
 
-		box.rotate_x(0.03);
-		//box.rotate_y(0.03);
-		//box.rotate_z(0.03);
-		box.render();
-
 		// Cap FPS
-		cap(start, MAX_FPS, 1, renderer, roboto);
+		cap(start, MAX_FPS, true, renderer, roboto);
 		// Update renderer
 		renderer_update(renderer);
 	}
