@@ -1,11 +1,12 @@
 
 
 
+
 # Game Engine Wiki
 
 ## Index
 
-- Core
+- [Core](#core)
 	- [UI](#ui)
 		- [Window](#window)
 		- [Renderer](#renderer)
@@ -17,26 +18,27 @@
 		- [Matrix](#mat)
 		- [Colors](#colors)
 		- [Mouse](#mouse)
+		- [Keyboard](#key)
 		- [Event Handler](#eh)
-	- [Source](#src)
-		- [Miscellaneous](#misc_src)
-			- [Resource Manager](#rm)
-            - [GameObjects](#go)
-            - [Rigidbody](#rb)
-		- [2D](#2d)
-			- [Image](#image)
-			- [Polygons](#poly)
-			- [Spritesheet](#ss)
-			- [Vector2D](#vect2d)
-		- [3D](#3d)
-			- [Vector3D](#vect3d)
-			- [Solids](#solids)
+- [Source](#src)
+	- [Miscellaneous](#misc_src)
+		- [Resource Manager](#rm)
+        - [GameObjects](#go)
+        - [Rigidbody](#rb)
+    - [2D](#2d)
+		- [Image](#image)
+		- [Polygons](#poly)
+		- [Spritesheet](#ss)
+		- [Vector2D](#vect2d)
+	- [3D](#3d)
+		- [Vector3D](#vect3d)
+		- [Solids](#solids)
 	- Audio
 	- Images 
 - Platform
 - [Credits](#credits)
 
-## Functionalities
+## Core <a name="core"></a>
 
 ## UI <a name="ui"></a>
 
@@ -398,6 +400,17 @@ Methods:
 	- **Returns**: a `Vector2D` with the mouse's X and Y position.
 - `Vector2D clicked(SDL_MouseButtonEvent& event)`: gets the coordinates where a mouse button was pressed, and stores them in a vector.
 	- **Returns**: a `Vector2D` with the coordinates.
+
+### Keyboard <a name="key"></a>
+Accessible data fields:
+- `bool key_is_pressed`: a bool that defines when there is a key pressed, updated every frame.
+- `SDL_Scancode scancode`: a scancode of the key that was pressed, updated every time a key is pressed. When no key is pressed, the `scancode` is set to `SDL_SCANCODE_UNKNOWN`.
+- `const char* key`: a `char` of the key that was pressed, following the scancode conversion detailed [here](https://wiki.libsdl.org/SDL2/SDL_GetScancodeName), updated every time a key is pressed.
+
+Methods:
+
+- `void update_key(SDL_Event& event)`: updates all of the information for the keyboard. Called every frame.
+
 
 ### Event Handler <a name="eh"></a>
 

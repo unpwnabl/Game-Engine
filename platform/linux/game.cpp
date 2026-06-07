@@ -14,6 +14,7 @@
 #include "../../core/misc/include/colors.h"
 #include "../../core/misc/include/fps.h"
 #include "../../core/misc/include/mouse.h"
+#include "../../core/misc/include/keyboard.h"
 #include "../../core/misc/include/events.h"
 #include "../../core/misc/include/matrix.hpp"
 #include "../../core/ui/include/window.h"
@@ -48,7 +49,7 @@ int main() {
 	// Initialize text manager
 	init_ttf();
 	TTF_Font *roboto = TTF_OpenFont(roboto_path, 10);
-	// Initialize image manager
+	// Initialize image manager for PNG format
 	init_img(IMG_INIT_PNG);
 
 	while (gameloop) {
@@ -58,6 +59,7 @@ int main() {
 		event_handler(window, gameloop);
 		// Clear previous frame
 		renderer_clear(renderer);
+
 
 
 		// Cap FPS
@@ -74,5 +76,5 @@ int main() {
 	destroy_window(window);
 
 	SDL_Quit();
-	success("Program terminated");
+	success("Application terminated");
 }

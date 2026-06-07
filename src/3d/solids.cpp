@@ -100,7 +100,7 @@ SDL_Renderer* Cube::get_renderer() const {
 void Cube::render() {
 	int n_points = 8;
 
-	auto points = new Vector3D[n_points];
+	Vector3D* points = new Vector3D[n_points];
 
 	//			     +------+  <- (x + width, y, z - depth)
 	//			   .'|    .'|
@@ -179,6 +179,10 @@ void Cube::render() {
 				Vector2D(projected_cube[(i + 4)].x, projected_cube[(i + 4)].y)
 		);
 	}
+
+	// Cleanup memory to avoid leaks
+	delete[] points;
+	delete[] projected_cube;
 }
 
 void Cube::rotate_x(float speed) {

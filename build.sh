@@ -16,17 +16,25 @@ fi
 
 clear
 
+# In case we didn't destroy them while cleaning up
 if [ -d build ] ; then
 	echo -e "\033[0;33m[!] Found previous build folder, deleting...\033[0m"
 	rm -rf build
 fi
 if [ -d dist ] ; then
-	echo -e "\033[0;33m[!] Found previous bundle folder, deleting...\033[0m"
+	echo -e "\033[0;33m[!] Found previous distribution folder, deleting...\033[0m"
 	rm -rf dist
 fi
 
 mkdir build
 cd build
+
+cleanup() {
+	cd .. 
+	rm -rf build
+}
+# Make sure no matter how we exit, we do clean up
+trap cleanup EXIT
 
 cmake ..
 cmake --build .
@@ -38,5 +46,3 @@ fi
 cmake --build . --target clean
 cmake --build . --target extra_clean
 
-cd .. 
-rm -rf build
