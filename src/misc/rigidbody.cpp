@@ -54,6 +54,26 @@ bool constrain(GameObject* n_go, const Vector2D& max, const Vector2D& min) {
 		n_go->rb->set_gravity(0);
 		return true;
 	}
+	// Corners
+	if (Vector2D(pos.x, pos.y + n_go->get_height()) <= min) {
+		// Top-left corner
+		n_go->set_pos(Vector2D(min.x, min.y - n_go->get_height()));
+		n_go->rb->set_delta(0);
+	} else if (Vector2D(pos.x + n_go->get_width(), pos.y) >= Vector2D(max.x, min.y)) {
+		// Top-right corner
+		n_go->set_pos(Vector2D(max.x - n_go->get_width(), min.y));
+		n_go->rb->set_delta(0);
+	} else if (Vector2D(pos.x, pos.y + n_go->get_height()) >= Vector2D(min.x, max.y)) {
+		// Bottom-left corner
+		n_go->set_pos(Vector2D(min.x, max.y - n_go->get_height()));
+		n_go->rb->set_delta(0);
+		n_go->rb->set_gravity(0);
+	} else if (Vector2D(pos.x + n_go->get_width(), pos.y + n_go->get_height()) >= max) {
+		// Bottom-right corner
+		n_go->set_pos(Vector2D(max.x - n_go->get_width(), max.y - n_go->get_height()));
+		n_go->rb->set_delta(0);
+		n_go->rb->set_gravity(0);
+	}
 	return false;
 }
 
@@ -104,16 +124,19 @@ void Rigidbody::fall() {
 
 void Rigidbody::move(float speed, int direction) {
 	set_delta(speed);
-	if (constrain(go, Vector2D(W_W, W_H), Vector2D(0, 0))) return;
+	// Check end position
+	Vector2D end_pos = go->get_pos();
 	if (direction == UP) {
-		go->set_pos(Vector2D(go->get_pos().x, go->get_pos().y - delta));
+		end_pos.y -= delta;
 	} else if (direction == DOWN) {
-		go->set_pos(Vector2D(go->get_pos().x, go->get_pos().y + delta));
+		end_pos.y += delta;
 	} else if (direction == LEFT) {
-		go->set_pos(Vector2D(go->get_pos().x - delta, go->get_pos().y));	
+		end_pos.x -= delta;	
 	} else if (direction == RIGHT) {
-		go->set_pos(Vector2D(go->get_pos().x + delta, go->get_pos().y));
+		end_pos.x += delta;
 	}
+	go->set_pos(end_pos);
+	if (constrain(go, Vector2D(W_W, W_H), Vector2D(0, 0))) return;
 }
 
 void Rigidbody::move_to(const Vector2D& n_pos) {
