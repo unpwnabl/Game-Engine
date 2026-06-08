@@ -24,16 +24,22 @@ class GameObject {
 
 		const char* get_name() const;
 		void set_name(const char* n_n);
+
 		Vector2D get_pos() const;
 		void set_pos(const Vector2D& n_pos);
+
 		int get_width() const;
 		int get_height() const;
 		void set_width(int n_w);
 		void set_height(int n_h);
+
 		Image& get_image();
 		const Image& get_image() const;
 		void set_image(const Image& image);
 		void set_image(Image&& image);
+
+		bool is_colliding(const GameObject& go);
+
 		void render() const;
 };
 

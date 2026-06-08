@@ -79,6 +79,16 @@ void GameObject::set_image(Image&& image) {
 	img = std::move(image);
 }
 
+bool GameObject::is_colliding(const GameObject& go) {
+	if (	position.x + w >= go.get_pos().x || 
+		position.x <= go.get_pos().x + go.get_width() || 
+		position.y + h >= go.get_pos().y ||
+		position.y <= go.get_pos().y + go.get_height()) {
+		return true;
+	}
+	return false;
+}
+
 void GameObject::render() const {
 	img.render();
 }

@@ -33,27 +33,26 @@ bool constrain(GameObject* n_go, const Vector2D& max, const Vector2D& min) {
 	Vector2D pos = n_go->get_pos();
 
 	// Left and right
-	if (pos.x - n_go->rb->get_delta() <= min.x) {
+	if (pos.x < min.x) {
 		n_go->set_pos(Vector2D(min.x, pos.y));
-		n_go->rb->set_delta(0);
+		n_go.rs->set_delta(0);
 		return true;
-	} else if (pos.x + n_go->get_width() + n_go->rb->get_delta() >= max.x ) {
+	} else if (pos.x > max.x - n_go->get_width()) {
 		n_go->set_pos(Vector2D(max.x - n_go->get_width(), pos.y));
-		n_go->rb->set_delta(0);
+		n_go.rs->set_delta(0);
 		return true;
 	}
 	// Top and bottom
-	if (pos.y - n_go->rb->get_delta() <= min.y) {
+	if (pos.y < min.y) {
 		n_go->set_pos(Vector2D(pos.x, min.y));
-		n_go->rb->set_delta(0);
+		n_go.rs->set_delta(0);
 		return true;
-	} else if (pos.y + n_go->get_height() + n_go->rb->get_delta() >= max.y) {
+	} else if (pos.y > max.y - n_go->get_height()) {
 		n_go->set_pos(Vector2D(pos.x, max.y - n_go->get_height()));
-		n_go->rb->set_delta(0);
-		// Also remove gravity
-		n_go->rb->set_gravity(0);
+		n_go.rs->set_delta(0);
 		return true;
 	}
+	
 	return false;
 }
 
@@ -86,10 +85,6 @@ void Rigidbody::set_gravity(double n_g) {
 	g = n_g;
 }
 
-const double Rigidbody::get_gravity() const {
-	return g;
-}
-
 void Rigidbody::set_delta(float speed) {
 	delta = speed;
 }
@@ -99,6 +94,7 @@ const float Rigidbody::get_delta() const {
 }
 
 void Rigidbody::fall() {
+	//if (constrain(go, Vector2D(W_W, W_H), Vector2D(0, 0))) return;
 	move(g, DOWN);
 }
 
@@ -117,5 +113,6 @@ void Rigidbody::move(float speed, int direction) {
 }
 
 void Rigidbody::move_to(const Vector2D& n_pos) {
+	//if (constrain(go, Vector2D(W_W, W_H), Vector2D(0, 0))) return;
 	go->set_pos(n_pos);
 }

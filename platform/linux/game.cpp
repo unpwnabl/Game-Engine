@@ -52,6 +52,9 @@ int main() {
 	// Initialize image manager for PNG format
 	init_img(IMG_INIT_PNG);
 
+	Image sprite(renderer, "imgs/player_sprite.png", Vector2D(0, 0), 50, 50);
+	GameObject player("player", Vector2D(150, 150), 50, 50, std::move(sprite));
+
 	while (gameloop) {
 		// Start counting ticks
 		Uint64 start = SDL_GetTicks();
@@ -59,8 +62,21 @@ int main() {
 		event_handler(window, gameloop);
 		// Clear previous frame
 		renderer_clear(renderer);
-
-
+		
+		player.rb->set_gravity(5);
+		if (key_is_pressed) {
+			if (scancode == SDL_SCANCODE_W) {
+				player.rb->move(5.5, UP);
+			} else if (scancode == SDL_SCANCODE_S) {
+				player.rb->move(2.5, DOWN);
+			} else if (scancode == SDL_SCANCODE_A) {
+				player.rb->move(2.5, LEFT);
+			} else if (scancode == SDL_SCANCODE_D) {
+				player.rb->move(2.5, RIGHT);
+			}
+		}
+		player.rb->fall();
+		player.render();
 
 		// Cap FPS
 		cap(start, MAX_FPS, true, renderer, roboto);

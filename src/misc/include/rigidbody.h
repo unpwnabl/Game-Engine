@@ -5,6 +5,13 @@
 
 class GameObject;
 
+bool constrain(GameObject* n_go, const Vector2D& max, const Vector2D& min);
+
+extern int UP;
+extern int DOWN;
+extern int LEFT;
+extern int RIGHT;
+
 class Rigidbody {
 	private:
 		double mass;
@@ -13,6 +20,7 @@ class Rigidbody {
 		double g;
 		double weight;
 		Vector2D friction;
+		float delta;
 	public:
 		Rigidbody();
 		Rigidbody(GameObject* n_go, double n_mass = 0.0, double n_drag = 0.0) noexcept;
@@ -23,14 +31,13 @@ class Rigidbody {
 		void set_drag(double n_d);
 		const double get_mass() const;
 		const double get_drag() const;
-		void add_force(const Vector2D& f);
-		void accelerate(const Vector2D& a);
 		void set_gravity(double g);
+		const double get_gravity() const;
+		void set_delta(float speed);
+		const float get_delta() const;
 		void fall();
-		void impulse(const Vector2D& i);
-		void move(const Vector2D& n_pos);
+		void move(float speed, int direction);
+		void move_to(const Vector2D& n_pos);
 };
-
-bool constraint(GameObject* n_go, const Vector2D& max, const Vector2D& min);
 
 #endif
