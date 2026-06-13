@@ -15,7 +15,7 @@ float calculate_time(Uint64 start) {
 }
 
 void cap (Uint64 start, int max, bool show, SDL_Renderer* renderer, TTF_Font* font) {
-	delta_time = calculate_time(start);
+	delta_time = (float)((SDL_GetTicks() - start) * 1000 / (double)SDL_GetTicks());
 	if ((delay / max) > (SDL_GetTicks() - start)) {
 		SDL_Delay((delay / max) - (SDL_GetTicks() - start));
 	}

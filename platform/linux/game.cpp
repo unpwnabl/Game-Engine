@@ -55,6 +55,8 @@ int main() {
 	Image sprite(renderer, "imgs/player_sprite.png", Vector2D(0, 0), 50, 50);
 	GameObject player("player", Vector2D(150, 150), 50, 50, std::move(sprite));
 
+	float speed = 2.5;
+
 	while (gameloop) {
 		// Start counting ticks
 		Uint64 start = SDL_GetTicks();
@@ -63,19 +65,23 @@ int main() {
 		// Clear previous frame
 		renderer_clear(renderer);
 		
-		player.rb->set_gravity(5);
 		if (key_is_pressed) {
 			if (scancode == SDL_SCANCODE_W) {
-				player.rb->move(5.5, UP);
-			} else if (scancode == SDL_SCANCODE_S) {
-				player.rb->move(2.5, DOWN);
+				player.rb->translate(Vector2D(0, -speed));
 			} else if (scancode == SDL_SCANCODE_A) {
-				player.rb->move(2.5, LEFT);
-			} else if (scancode == SDL_SCANCODE_D) {
-				player.rb->move(2.5, RIGHT);
+				player.rb->translate(Vector2D(-speed, 0));
+			} else if (scancode == SDL_SCANCODE_S) {
+				player.rb->translate(Vector2D(0, speed));
+			}else if (scancode == SDL_SCANCODE_D) {
+				player.rb->translate(Vector2D(speed, 0));
 			}
 		}
-		player.rb->fall();
+			
+
+		if (player.rb->is_line_colliding(Vector2D(0, W_H), Vector2D(W_W, W_H))) {
+			player.set_pos(Vector2D(W_W / 2, W_H / 2));
+		}
+
 		player.render();
 
 		// Cap FPS

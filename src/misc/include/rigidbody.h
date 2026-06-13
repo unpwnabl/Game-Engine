@@ -5,13 +5,6 @@
 
 class GameObject;
 
-bool constrain(GameObject* n_go, const Vector2D& max, const Vector2D& min);
-
-extern int UP;
-extern int DOWN;
-extern int LEFT;
-extern int RIGHT;
-
 class Rigidbody {
 	private:
 		double mass;
@@ -20,7 +13,6 @@ class Rigidbody {
 		double g;
 		double weight;
 		Vector2D friction;
-		float delta;
 	public:
 		Rigidbody();
 		Rigidbody(GameObject* n_go, double n_mass = 0.0, double n_drag = 0.0) noexcept;
@@ -33,11 +25,13 @@ class Rigidbody {
 		const double get_drag() const;
 		void set_gravity(double g);
 		const double get_gravity() const;
-		void set_delta(float speed);
-		const float get_delta() const;
+
 		void fall();
-		void move(float speed, int direction);
+		void translate(const Vector2D& trans);
 		void move_to(const Vector2D& n_pos);
+
+		bool is_box_colliding(const GameObject& n_go);
+		bool is_line_colliding(const Vector2D& p1, const Vector2D& p2);
 };
 
 #endif
