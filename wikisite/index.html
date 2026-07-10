@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Game Engine Dev</title>
+    <link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
+	<!--Display LaTeX in HTML using MathJax--!>
+	<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+</head>
+	<body>
+	<div class="topbar">
+		<p><a class="toplink" href="#">Index</a> | <a class="toplink" href="#">Download</a> | <a class="toplink" href="#">Contact</a> | <a class="toplink" href="#">About</a></p>
+	</div>
+	<div class="centering">
+		<h1>Game Engine</h1>
+		<h2>Abstract</h2>
+		<div class="abstract">
+			<p>
+				A <b>game engine</b> is 
+				<blockquote>"a software framework primarily designed for video game development, which may include specialized software libraries and packages"</blockquote>
+				<figcaption><a href="https://en.wikipedia.org/wiki/Game_engine">Wikipedia on "Game engines"</a></figcaption></br>
+				It usually is a wrapper for many other engines like graphics engine, physics engine, audio engine, animation engine, etc... combined to make development easier and self-sustained. Thus, developing a game engine is developing multiple sub-engines that can talk and interact with each other in different ways. </br>
+Due to the proprietary licenses that are applied to big engines like Unity, Unreal, etc... much of the underground work is already done and prepackaged for us to use. But simply using something doesn't mean we know how it works. Additionally, the licenses are heavily in favor of the companies, in respect to the little you gain from developing on their software. Big gamedev studios have already developed their own game engines in order to maximize profits and avoid third parties altogether . </br>
+				This is why many choose to build their own game engines from scratch, like a challenge or simply for fun. And this is the basic concept behind the development of this game engine. The objective is to develop a fully functional software that is able to deliver high-end games with as much functionality it can produce, all while learning the core principles that make a game engine a game engine. 	
+			</p>
+		</div>
+		<h2>Structure</h2>
+		<p>
+			Before we begin, there are some ground rules we need to give ourselves. Game engines are usually of two types:
+			<ul>
+				<li><b>Software engines</b>: they basically allow the user to build the game from a window, using buttons and mainly the mouse to do everything (e.g. Unity, Unreal, etc...)</li>
+				<li><b>Library engines</b>: they are libraries which are included in the code for the game that give core functionalities to create a window, render images or text, etc...</li>
+			</ul>
+			The game engine that this paper is going to present is the latter, thus we will build from scratch the core functionalities that allow us to create a basic game, that can be later expanded to a fully-fledged game engine for AAA games. </br>
+			We're going to be using <a href="https://www.libsdl.org/">Simple DirectMedia Layer 2</a> as our boilerplate for basic window and image rendering. Also, there is another goal in mind: develop the final product using the least amount of external libraries possible. Since we're working with C++, the only libraries I've allowed myself to use are <code>&lt;stdio&gt;</code>, <code>&lt;stdlib&gt;</code>, <code>&lt;string&gt;</code> and <code>&lt;cmath&gt;</code>.</br>
+			Let's look at the folder structure for the engine:
+			<div class="code">
+				<pre><code>GameEngine
+├── core
+│   ├── misc
+│   └── ui
+├── platform
+├── src
+│   ├── 2d
+│   ├── 3d
+│   └── misc
+└── thirdparty</code></pre>
+			</div>
+			<ul>
+				<li><code>Core</code> is where the main functionalities of our engine will reside, like creating a window, a renderer, defining image classes, etc...</li>
+				<li><code>Platform</code> is where platform-specific code will reside (Windows, Linux, macOS), and our <code>main()</code> function too.</li>
+				<li><code>Thirdparty</code> will store all of the libraries, font and images we use in the development of our engine.</li>
+			</ul>
+		</p>
+			<h2>Basics</h2>
+	To start off, we need some utilities that will help up work and debug the code. Expecially for the latter, we could use the console to display messages regarding how work is going. This is the <code>log.cpp</code> file, which will print different messages with different colors, just because it looks better and helps us visualize the intensity of what we're logging:
+	<div class="code">
+		<pre><code id="log">#include &lt;SDL2/SDL.h&gt;
+#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+#include "include/log.hpp"
+
+void debug_b() {
+	std::cout << "\033[0;90m<================Starting debug============>\033[0m" << std::endl;
+}
+
+void sdl_error(const char* s) {
+	std::cout << "\033[4;31m[✗] " << s << ": " << SDL_GetError() << "\033[0m" << std::endl;
+	exit(EXIT_FAILURE);
+}
+
+void error(const char* s) {
+	std::cout << "\033[4;31m[✗] " << s << "\033[0m" << std::endl;
+	exit(EXIT_FAILURE);
+}
+
+void warning(const char* s) {
+	std::cout << "\033[0;33m[!] " << s << "\033[0m" << std::endl;
+}
+
+void success(const char* s) {
+	std::cout << "\033[0;32m[✓] " << s << "\033[0m" << std::endl;
+}
+
+void message(const char* s) {
+	std::cout << "\033[0;90m[.] " << s << "\033[0m" << std::endl;
+}</code></pre>
+	</div>
+
+	This code uses <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI escape code sequence</a> to represent colors inside the terminal. By using the escape sequence <code>\033[</code>, we can give two integer values that represent foreground color and background color. In this particular case:
+	<ul>
+		<li>SDL-specific errors will be printed like: <p style="display: inline; text-decoration: underline; color: red">[✗] [custom message] : [SDL_GetError()]</p></li>
+		<li>Errors will be printed like: <p style="display: inline; text-decoration: underline; color: red">[✗] [custom message]</p></li>
+		<li>Warnings will be printed like: <p style="display: inline; color: orange">[!] [custom message]</p></li>
+		<li>Successfull operations will be printed like: <p style="display: inline; color: green">[✓] [custom message]</p></li>
+		<li>Debugging messages will be printed like: <p style="display: inline; color: grey">[.] [custom message] </p></li>
+	</ul>
+
+	Talking about colors, we can define our own colors with names except of hex values like so:
+	<div class="code">
+		<pre><code>#include &lt;SDL2/SDL.h&gt;
+#include "include/colors.h"
+#define ALPHA 255
+
+SDL_Color C_WHITE = {255, 255, 255, ALPHA};
+SDL_Color C_RED = {255, 0, 0, ALPHA};
+SDL_Color C_GREEN = {0, 255, 0, ALPHA};
+SDL_Color C_BLUE = {0, 0, 255, ALPHA};
+SDL_Color C_BLACK = {0, 0, 0, ALPHA};</code></pre>
+	</div>
+	</br>
+	This makes things easier since we can choose the value of each channel like so: 
+	<ul>
+		<li><code>C_[color name].r</code> for <p style="display: inline;color: red;">red</p> value.</li>
+		<li><code>C_[color name].g</code> for <p style="display: inline;color: green;">green</p> value.</li>
+		<li><code>C_[color name].b</code> for <p style="display: inline;color: blue;">blue</p> value.</li>
+		<li><code>C_[color name].a</code> for <p style="display: inline;color: grey;">alpha</p> value.</li>
+	</ul>
+
+	<h2>Engines</h2>
+	<p>
+		As we said, a game engine is a wrapper for multiple engines. The main ones we will develop are:
+		<ul>
+			<li><b>Graphics engine</b>: the base of everything, it will allow us to see what we're doing in real time displaying objects to a custom window.</li>
+			<li><b>Physics engine</b>: deals with rigidbody physics, forces and everything else.</li>
+			<li><b>Audio engine</b>: deals with the audio files, adding reverb, spatial, etc...</li>
+		</ul>
+	</p>
+	<h3>Graphics Engine</h3>
+	<p>
+	The basic functionality of any game engine, or at least any software dealing with <i>User-Interfaces</i> (UI), is displaying things onto the screen. Starting out, we need a <b>window</b>:
+		<blockquote>"In computing, a window is a graphical control element. It consists of a visual area containing some of the graphical user interface of the program it belongs to and is framed by a window decoration."</blockquote>
+		<figcaption><a href="https://en.wikipedia.org/wiki/Window_(computing)">Wikipedia on "computer windows"</a></figcaption>
+
+		Since we're using SDL2, an opaque type for a window is already given to us as <code>SDL_Window</code>. This will be our main window for anything, thus we just need to initialize it following the functionalities of SDL2:
+		<div class="code">
+			<pre><code id="window">void create_window(SDL_Window*& window, const char* title, int x, int y, 
+			int width, int height, Uint32 flags) {
+	window = SDL_CreateWindow(title, x, y, width, height, flags);
+		if (!window) {
+		sdl_error("window.cpp > Window couldn't be created");
+	}
+	message("Window has been created");
+	SDL_SetWindowResizable(window, SDL_FALSE);
+}
+void destroy_window(SDL_Window*& window) {
+	if (!window) {
+		warning("window.cpp > Window already destroyed...");
+	} else {
+		SDL_DestroyWindow(window);
+		window = NULL;
+	}
+}</code></pre>
+    		</div>
+		This is how the window is created/destroyed inside the engine. We pass it a <code>SDL_Window</code> object, and it automatically creates the window, sets it non-resizable ad handles its destruction in a memory-safe way. What we obtain is a window being created on the screen with a title, at an \( (x,y) \) position with \( width \times height \) dimension. </br>
+
+		<img src="imgs/empty_window.png">
+		<p class="subimage">Fig 1. Empty window created</p>
+
+		Now that we have a window, we need to create a <b>renderer</b>:
+		<blockquote>"In a computer graphics context, in standard usage, the word <i>rendering</i> by itself means rendering 3D scenes,but it is sometimes used with a broader meaning. A modifier such as "2D" or "3D" is used when there is potential ambiguity."</blockquote>
+		<figcaption><a href="https://en.wikipedia.org/wiki/Rendering_(computer_graphics)">Wikipedia on "rendering"</a></figcaption>
+
+		Thus, a renderer allows us to effectively draw something onto the window, that we can now refer to as a <i>canvas</i>. SDL2 gives us the <code>SDL_Renderer</code> object which we can pass into the engine's initializer <code>void create_renderer(SDL_Window* window, SDL_Renderer*& renderer)</code> or destroyer <code>void destroy_renderer(SDL_Renderer*& renderer)</code>:
+		<div class="code">
+			<pre><code>#include &lt;SDL2/SDL.h&gt;
+
+#include "../../misc/include/log.hpp"
+#include "../../misc/include/colors.h"
+#include "include/renderer.h"
+
+void create_renderer(SDL_Window* window, SDL_Renderer*& renderer) {
+	// Use VSync and hardware acceleration on render
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+	if (!renderer) {
+		sdl_error("renderer.cpp > Renderer couldn't be created");
+	}
+	message("Renderer has been created");
+	// Set background to black
+	SDL_SetRenderDrawColor(renderer, C_BLACK.r, C_BLACK.g, C_BLACK.b, C_BLACK.a);
+	SDL_RenderClear(renderer);
+}
+
+
+void destroy_renderer(SDL_Renderer*& renderer) {
+	if (!renderer) {
+		warning("renderer.cpp > Renderer already destroyed...");
+	} else {
+		SDL_DestroyRenderer(renderer);
+		renderer = NULL;
+	}
+}</code></pre>
+		</div>
+		</br>
+		We create the renderer through the <code>SDL_CreateRenderer</code> function, and we set the background to black before clearing the screen. When we want to destroy it, we simply use another function, the <code>SDL_DestroyRenderer</code>, and set to <code>NULL</code> its pointer. </br>
+		Since the renderer isn't a static object, we also do have some functionalities connected to it, such as:
+		<ul>
+			<li><code>void renderer_update(SDL_Renderer* renderer)</code>: updates the renderer.</li>
+			<li><code>void renderer_clear(SDL_Renderer* renderer)</code>: clears the renderer.</li>
+		</ul>
+		Like so:
+		<div class="code">
+			<pre><code>void renderer_update(SDL_Renderer* renderer) {
+	SDL_RenderPresent(renderer);
+}
+
+void renderer_clear(SDL_Renderer* renderer) {
+	// Clear the previous frame to black
+	SDL_SetRenderDrawColor(renderer, C_BLACK.r, C_BLACK.g, C_BLACK.b, C_BLACK.a);
+	SDL_RenderClear(renderer);
+}</code></pre>
+		</div>
+		</br>
+			Now, when we present data to be displayed onto the screen &mdash; hence why it's called <code>SDL_RenderPresent</code> &mdash; we can't just let the pixel stay on the screen, otherwise movement will seem duplicated:
+
+		<img class="square" src="imgs/frame.png">
+		<p class="subimage">Fig 3. Avoiding clearing frame buffer</p>
+
+		After every rendering of a frame, we need to clear the frame buffer to display correctly the next frame. To do so, we use <code>renderer_clear()</code>, that will clear the screen by putting all black pixels inside the buffer:
+
+		<img class="square" src="imgs/clear.gif">
+		<p class="subimage">Fig 4. Clearing frame buffer</p>
+
+		The only problem now is when to call each function... </br>
+		When we begin drawing, the GPU receives data in, and outputs a stream of pixels. Most screens use a <b>frame buffer</b> that stores the individual calculated pixels until a full <b>frame</b> is produced. One everything is set, it's sent to the screen, an each pixel is drawn from the top-left corner to the bottom-right corner of the screen (a technique called "progressive scanning") many times per second, a period of time called <b>frame rate</b>:
+
+		<img class="square" src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Progressive_video_animation_%28TFF%29.gif">
+		<div class="attribution">
+			<a href="https://commons.wikimedia.org/wiki/File:Progressive_video_animation_(TFF).gif">Kadano</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>, via Wikimedia Commons
+		</div>
+		<p class="subimage">Fig 2. Progressive scanning of pixels</p>
+
+		The faster the frame rate, the more fluid the movement: for example, eyes <i>render</i> images and simple movements in a \( 30 \)-\( 60 \) frames per second interval (time it takes light to be processed inside the eye, the image sent to the brain, and the processing of it inside the brain), so matching it or even surpassing it makes everything smoother. </br>
+		Basically, if we can calculate the time between each refresh, we have the exact window of time to call the refresh and present pixel functions. That interval is the time \( t \) elapsed from when we start drawing to when we end drawing &mdash; calculated like \( t_{final} - t_{start} \) &mdash; is called \( \Delta t \) or <b>delta time</b>. </br>
+		If we don't use the delta time, our game loop will present pixel data and clear the screen as fast as it can run, which is not optimal and will consume a lot of resources. Using it, we can make our code run exactly in time with the screen refresh rate:
+		<div class="code">
+			<pre><code>float delta_time;
+int delay = 1000;
+
+float calculate_time(Uint64 start) {
+	return (float)(SDL_GetTicks() - start);
+}
+
+void cap (Uint64 start, int max) {
+	delta_time = (float)((SDL_GetTicks() - start) * 1000 / (double)SDL_GetTicks());
+	if ((delay / max) > (SDL_GetTicks() - start)) {
+		SDL_Delay((delay / max) - (SDL_GetTicks() - start));
+	}
+}</code></pre>
+		</div>
+		</br>
+		Let's go through this step by step:
+		<ul>
+			<li><b>Line 4</b> - <b>Line 6</b>: the function <code>calculate_time()</code> takes in a starting point in time, and returns the elapsed time using the <code>SDL_GetTicks()</code>, basically using the delta time formula.</li>
+			<li><b>Line 8</b> - <b>Line 13</b>: we define a capping function, which means it will <i>delay</i> our run time in case we're going faster than we should. Firstly, we calculate the delta time, then check if \( \frac{delay}{max} > \Delta time\). In case it's true, we use <code>SDL_Delay()</code> by the amount of time we're skipping.</li>
+		</ul>
+	 Now that we have the base to display stuff to the screen, we can proceed to dimension-specific rendering.
+	</p>
+	<h4>2D Graphics Engine</h4>
+	<p>
+	A two-dimensional space is a mathematical space with two dimensions (duh), which we can represent using the <i>Euclidian plane</i> \( \mathbb E ^2 \). On it, we use the <i>Cartesian coordinate system</i>, thus obtaining a <i>Cartesian plane</i>, where every position is denoted using two real numbers in pair, that determine the offset from the origin at \( (0,0) \). The horizontal axis is called <i>ordinate</i> or <b>\( x \) axis</b>, meanwhile the vertical axis is called <i>abscissa</i> or <b>\( y \) axis</b>, and these two divide the plane in \( 4 \) <i>quadrants</i>.
+
+	<img class="square" src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Cartesian-coordinate-system.svg">
+	<div class="attribution">
+		<a href="https://commons.wikimedia.org/wiki/File:Cartesian-coordinate-system.svg">Kbolino</a>, Public domain, via Wikimedia Commons
+	</div>
+	<p class="subimage">Fig 5. Cartesian coordinates</p>
+
+	These notions are necessary to understand where objects will appear based on the positions we will give them. By default, every window of every operating system has the origin at the top-left corner, so we're working with the bottom-right quadrant (thus \( x \) is always positive, meanwhile \( y \) will increase the further down we go). </br>
+	Now that we understand how to represent position, we can simplify our lives talking about <i>vectors</i> in Euclidian geometry:
+
+	<blockquote>"[...] A Euclidean vector, or simply a vector [...] is a geometric object that has magnitude (or length) and direction. Euclidean vectors can be added and scaled to form a vector space. [...] A vector is frequently depicted graphically as an arrow connecting an initial point \( A \) with a terminal point \( B \), and denoted by \( \overrightarrow{AB} \)"</blockquote>
+	<figcaption><a href="https://en.wikipedia.org/wiki/Vector_(mathematics_and_physics)">Wikipedia on "vectors"</a></figcaption>
+
+	Thus a vector holds two points, like this: \( \begin{bmatrix} a \\ b \end{bmatrix} \). While vectors are mainly used with matrices and scalars (which we'll talk about later with 3D graphics), they also serve another function: they store two values. Where do we need to access two numbers in pair to represet something? That's right, a vector can be used to represent a point in the plane like \( (a, b) \). Thus, we can create the <code>Vector2D</code> class to handle vectors in 2-dimensions:
+	<div class="code">
+		<pre><code>class Vector2D {
+	public:
+		double x;
+		double y;
+		
+		Vector2D(double x_pos, double y_pos);
+		
+}</code></pre>
+	</div>
+	</br>
+	This class creates a vectors object, whose constructor is <code>Vector2D(double x, double y)</code>. Since the values are public, we can reference them easy in the code like so:
+	
+	<div class="code">
+		<pre><code>Vector2D position = new Vector2D(150, 150);
+std::cout << "(" << position.x << ", " << position.y << ")" << std::endl;
+// "(150, 150)"</code></pre>
+	</div>
+	</br>	
+	Now that we have the tools to represent a point in Euclidian space, we can use it to build the next block of our graphics engine, something so important it wouldn't be a graphics engine without: <i><b>shapes</b></i>.
+
+	<h4>Polygons</h4>
+	
+	The fundational block of every graphic design is the simple shape. Every videogame ever created, even "<a href="https://www.bnl.gov/about/history/firstvideo.php">Tennis for Two</a>" (the first ever video game), had the most basic shapes ever. Basically, if we want to create a real graphics engine, we need to add shape rendering. </br>
+	Thankfully, SDL2 already has built-in functions to render shapes, or as we should call them geometrically <b>polygons</b>, so we can build functions around them to facilitate coding them in the game:
+	<div class="code">
+		<pre><code>#include &lt;SDL2/SDL.h&gt;
+
+#include "../../core/misc/include/log.hpp"
+#include "include/polygons.h"
+#include "include/vector2d.hpp"
+
+void rect(SDL_Renderer* renderer, Vector2D pos, int w, int h, SDL_Color fcolor, bool filled) {
+	SDL_Rect rect;
+	rect.x = pos.x;
+	rect.y = pos.y;
+	rect.w = w;
+	rect.h = h;
+	SDL_SetRenderDrawColor(renderer, fcolor.r, fcolor.g, fcolor.b, fcolor.a);
+	if (filled) {
+		SDL_RenderFillRect(renderer, &rect);
+	}
+	SDL_RenderDrawRect(renderer, &rect);
+
+}
+
+void point(SDL_Renderer* renderer, Vector2D pos, SDL_Color fcolor) {
+	SDL_SetRenderDrawColor(renderer, fcolor.r, fcolor.g, fcolor.b, fcolor.a);
+	SDL_RenderDrawPoint(renderer, pos.x, pos.y);
+}
+
+void line(SDL_Renderer* renderer, Vector2D pos1, Vector2D pos2, SDL_Color fcolor) {
+	SDL_SetRenderDrawColor(renderer, fcolor.r, fcolor.g, fcolor.b, fcolor.a);
+	SDL_RenderDrawLine(renderer, pos1.x, pos1.y, pos2.x, pos2.y);
+}
+
+void connect(SDL_Renderer* renderer, Vector2D point1, Vector2D point2, SDL_Color fcolor) {
+	line(renderer, point1, point2, fcolor);
+}</code></pre>
+	</div>
+
+	This piece of code renders a <code>rect</code>angle, <code>point</code>, <code>line</code> and a special function that will help us when dealing with 3 dimensions further down the road, the <code>connect</code>. 
+
+	<img class="square" src="imgs/polygons.png">
+	<p class="subimage">Fig 7. Rect, point and line rendered onto the window</p>
+
+	Many consider the job done here, and continue on developing other stuff inside their engine, but we can't consider our graphics engine done with only basic shapes. The next step towards a completed version of this is rendering <i><b>images</b></i>. </br>
+	To do that, we have to go down a little rabbit hole... </br>
+
+	<h4>Images</h4>
+
+	An image, in computing, is a collection of picture elements, or <i>pixels</i>, that are a numeric representation for color, intensity and alpha value, stored in a <i>raster image</i> (JPEGs, PNGs and GIFs are raster images):
+
+	<img class="square" src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Rgb-raster-image.svg">
+	<div class="attribution">
+		<a href="https://commons.wikimedia.org/wiki/File:Rgb-raster-image.svg">Gringer</a>, CC0, via Wikimedia Commons
+	</div>
+	<p class="subimage">Fig 8. Raster image and pixel data</p>
+
+	As we can see, each pixel holds three important values, which we've already seen in the definition of colors for the engine:
+	<ul>
+		<li><code>R</code> for <p style="display: inline;color: red;">red</p> value.</li>
+		<li><code>G</code> for <p style="display: inline;color: green;">green</p> value.</li>
+		<li><code>B</code> for <p style="display: inline;color: blue;">blue</p> value.</li>
+	</ul>
+	The sum of these three colors &mdash; called <i>additive primary colors</i> &mdash; creates every possible color displayable onto a LCD screen.
+
+	<div class="svg">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 410 400">
+			<g transform="matrix(134,0,0,134,205,143)">
+				<path fill="#f00" d="M1 0A1 1 0 0 0-1 0"/>
+				<path fill="#0f0" d="M-1 0A1 1 0 0 0 0 1.73"/>
+				<path fill="#00f" d="M0 1.73A1 1 0 0 0 1 0"/>
+				<path fill="#ff0" d="M0 0A1 1 0 0 0-1 0 1 1 0 0 0-.5.87"/>
+				<path fill="#0ff" d="M-.5.87A1 1 0 0 0 0 1.73 1 1 0 0 0 .5.87"/>
+				<path fill="#f0f" d="M.5.87A1 1 0 0 0 1 0 1 1 0 0 0 0 0"/>
+				<path fill="#fff" d="M0 0A1 1 0 0 0-.5.87 1 1 0 0 0 .5.87 1 1 0 0 0 0 0"/>
+			</g>
+			<text font-size="60" fill="#eee" font-family="sans-serif">
+				<tspan x="180" y="90">R</tspan>
+				<tspan x="60" y="310" fill="#888">G</tspan>
+				<tspan x="310" y="310">B</tspan>
+			</text>
+		</svg>
+	</div>
+	<div class="attribution">
+		<a href="https://commons.wikimedia.org/wiki/File:Venn_diagram_rgb.svg">Immanuelle</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
+	</div>
+	<p class="subimage">Fig 9. Additive primary colors</p>
+	</br>
+
+	For now, we will consider that every image passed into the engine is a PNG raster image, so let's ignore every other possible type, such as vector images and such. </br>
+	SDL, as always, has a way to display image data onto a screen, but it's not as straightfoward as the polygons. </br>
+	An image is composed of 2 elements:
+	<ul>
+		<li><b>Surface</b>: a collection of pixels used in software blitting.</li>
+		<li><b>Texture</b>: a representation of pixel data.</li>
+	</ul>
+	
+	So to effectively render an image inside a window, the SDL library creates a surface, that extracts pixels from an image and stores them in memory, until a texture of that surface is created. Once we have the texture, we can add it to the renderer to be rendered onto the screen. An implementation of the class <code>Image</code> would look something like this:
+
+	<div class="code">
+		<pre><code>#include &lt;SDL2/SDL.h&gt;
+
+#include "vector2d.hpp"
+#include "../../../core/misc/include/colors.h"
+
+void init_img(int flags);
+
+class Image {
+	private:
+		const char* path;
+		SDL_Texture* texture = NULL;
+		SDL_Renderer* i_renderer;
+		SDL_Rect rect;
+		Vector2D position;
+		int w;
+		int h;
+		SDL_Point center;
+		SDL_Color color;
+	
+	public:
+
+		Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos, 
+			int width = 0, int height = 0, SDL_Color i_color = C_WHITE) noexcept;
+		~Image() noexcept;
+
+		void render() const;
+};
+
+void close_img();</code></pre>
+	</div>
+	</br>
+	Firstly, let's initialize a special library of SDL to work with images: <code>SDL_image.h</code>. After that, an image is declared by its constructor, taking in a renderer, the path as a string to the file, the position to be rendered to, a width and a height, and an eventual color. Naturally, we might not want to render all images at once, so we specify a <code>render()</code> function.
+	</br>
+	Let's see how to effectively implement the image:
+
+	<div class="code">
+		<pre><code>#include &lt;SDL2/SDL.h&gt;
+#include &lt;SDL2/SDL_image.h&gt;
+
+#include &lt;string&gt;
+#include &lt;cstdlib&gt;
+
+#include "../../core/misc/include/log.hpp"
+#include "../../core/misc/include/colors.h"
+#include "../../src/misc/include/resources.h"
+#include "include/vector2d.hpp"
+#include "include/image.h"
+
+void init_img(int flags) {
+	if (IMG_Init(flags) == 0) {
+		sdl_error("image.cpp > Couldn't initialize SDL_Image");
+	}
+	message("SDL_image initialized successfully");
+}</code></pre>
+	</div>
+
+	</br>
+	The main flag we will use is the <code>IMG_INIT_PNG</code> to work with PNGs.
+
+	Now that we have initialized the library, we can finally define what an image is to the game engine:
+
+	<div class="code">
+		<pre><code>Image::Image(SDL_Renderer *renderer, const char* image_path, const Vector2D& pos,
+			int width, int height, SDL_Color i_color) noexcept {
+	// Use the resource manager to get surfaces and create textures efficently
+	texture = SDL_CreateTextureFromSurface(i_renderer, get_surface(path));
+	if (w > 0 && h > 0) {
+		rect.w = w;
+		rect.h = h;
+	} else if (w == 0 && h == 0) {
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	} else {
+		error("image.cpp > Incorrect usage of width/height measures");
+	}
+	rect.x = position.x;
+	rect.y = position.y;
+	center = {w / 2, h / 2};
+	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+}</code></pre>
+	</div>
+
+	Now let's go step by step:
+	<ul>
+		<li><b>Line 2</b>: we create a texture from a surface, given to us by the <code>get_surface()</code> function. As we've already said, a surface loads pixels into memory and stores them until we actually use them in a texture. This helper function (that resides in <code>resources.h</code>) retrieves the surface of an image already initialized in memory to avoid loading them again in memoy, wasting time and computing power. Every time a new image is created, if not already present inside the list, we append its surface to an unordered list whose key is the file path (since every file path is unique).</li>
+	
+		<img style="width: 311px; height: 481px;" src="imgs/surface_memory.png">
+		<p class="subimage">Fig 10. Better memory handling with surface preloading</p>
+
+		<li><b>Line 3</b> - <b>Line 9</b>: Check if we're given the dimensions. Since maybe we want to specify ourselves the size, and not let it be the effective size of the image, we can define the <code>rect</code>'s width and height. Else, the SDL <code>SDL_QueryTexture</code> will retrieve the size of the image itself.</li>
+		<li><b>Line 10</b> - <b>Line 11</b>: Position the rect that will represent our image to its position.</li>
+		<li><b>Line 12</b>: Find the center of the image. This will be helpful when we will add rotation.</li>
+		<li><b>Line 13</b>: Color the image with the specified color.</li>
+	</ul>
+
+	</p>
+    </div>
+  </body>
+</html>

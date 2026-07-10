@@ -11,7 +11,7 @@
     <a href="#getting-started">Getting Started</a> | <a href="#wiki">Wiki</a> | <a href="#contributing">Contributing</a> | <a href="#license">License</a>
 </p>
 
-![](/imgs/screenshot.png) <a name="install"></a>
+![](/imgs/screenshot.png) <a name="screen"></a>
 
 ## Getting Started
 
@@ -37,6 +37,14 @@ For more informations, use the option `./build.sh --help` or `./build.sh -h`.
 
 > [!CAUTION]
 > Some elements, like fonts and images, are omitted due to their licenses not being public. Thus, running the program without them will lead to problems.
+
+## Examples
+
+For practical examples, please refer to the `platform/linux/examples` folder.
+
+[Function plotter](platform/linux/examples/function_plotter.cpp)
+
+![](/imgs/fun_plotter.png) <a name="plotter"></a>
 
 ## Wiki
 

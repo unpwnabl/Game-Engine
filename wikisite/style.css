@@ -1,0 +1,97 @@
+@font-face {
+	font-family: "Computer Modern";
+	src: url('font/Computer Modern/Serif/cmunrm.woff');
+}
+
+html {
+	font-size: large;
+}
+
+h1 {
+	text-align: center;	
+}
+
+blockquote {
+	font-style: italic;
+	border: 1px solid #000000;
+	border-radius: 2px;
+	padding: 8px;
+}
+
+figcaption {
+	font-size: small;
+	padding-left: 40px;
+	padding-bottom: 20px;
+}
+
+div.topbar {
+	justify-content: center;
+	margin: auto;
+	text-align: center;
+	font-size: large;
+}
+
+a.toplink {
+	color: #000000;
+	text-decoration: none;
+}
+
+div.centering {
+	justify-content: center;
+	margin: auto;
+	width: 80%;
+	text-align: left;
+	font-family: Computer Modern;
+}
+
+div.abstract {
+	margin: auto;
+	width: 70%;
+}
+
+img {
+	display: block;
+	margin: auto;
+	padding: 10px;
+	width: 50;
+	height: 50%;
+}
+
+img.square {
+	width: 300px;
+	height: 300px;
+}
+
+div.attribution {
+	font-size: small;
+	text-align: center;
+}
+
+p.subimage {
+	font-style: italic;
+	font-size: small;
+	text-align: center;
+	
+}
+
+div.svg {
+	justify-content: center;
+	margin: auto;
+	width: 300px;
+	height: 300px;
+
+}
+
+div.code {
+	font-family: Consolas, "courier new";
+	background-color: #f1f1f1;
+	padding: 5px;
+	font-size: medium;
+	
+}
+
+code {
+	font-family: Consolas, "courier new";
+	background-color: #f1f1f1;
+	font-size: small;
+}
