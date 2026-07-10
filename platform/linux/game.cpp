@@ -79,7 +79,7 @@ int main() {
 			
 
 		if (player.rb->is_line_colliding(Vector2D(0, W_H), Vector2D(W_W, W_H))) {
-			player.set_pos(Vector2D(player.get_pos().x, W_H - player.get_width()));
+			player.set_pos(Vector2D(W_W / 2, W_H / 2));
 		}
 
 		player.render();
