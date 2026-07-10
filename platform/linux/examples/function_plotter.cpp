@@ -42,7 +42,7 @@ int main() {
 	}
 	// Create the window
 	SDL_Window *window = NULL;
-	create_window(window, "Test", 0, 0, W_W, W_H, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+	create_window(window, "Function Plotter", 0, 0, W_W, W_H, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
 	// Create the renderer
 	SDL_Renderer *renderer;
 	create_renderer(window, renderer);
@@ -52,10 +52,18 @@ int main() {
 	// Initialize image manager for PNG format
 	init_img(IMG_INIT_PNG);
 
-	Image sprite(renderer, "imgs/player_sprite.png", Vector2D(0, 0), 50, 50);
-	GameObject player("player", Vector2D(150, 150), 50, 50, std::move(sprite));
+	float points[] = {-100, -75, 0, 50, 25, 10, 30, 100, -100, -75, 0, 50, 25, 10, 30, 100, -100, -75, 0, 50, 25, 10, 30, 100,};
+	int n_points = 24;
 
-	float speed = 2.5;
+	int pos = 0;
+	int step = (int)W_W / n_points;
+
+	Vector2D vertex[n_points];
+
+	for (int i = 0; i < n_points; i++) {
+		vertex[i] = Vector2D(pos, points[i] + W_H / 2);
+		pos += step;
+	}
 
 	while (gameloop) {
 		// Start counting ticks
@@ -64,25 +72,19 @@ int main() {
 		event_handler(window, gameloop);
 		// Clear previous frame
 		renderer_clear(renderer);
+
+		// X axis
+		line(renderer, Vector2D(0, W_H / 2), Vector2D(W_W, W_H / 2));
+		// Y axis
+		line(renderer, Vector2D(W_W / 2, 0), Vector2D(W_W / 2, W_H));
 		
-		if (key_is_pressed) {
-			if (scancode == SDL_SCANCODE_W) {
-				player.rb->translate(Vector2D(0, -speed));
-			} else if (scancode == SDL_SCANCODE_A) {
-				player.rb->translate(Vector2D(-speed, 0));
-			} else if (scancode == SDL_SCANCODE_S) {
-				player.rb->translate(Vector2D(0, speed));
-			}else if (scancode == SDL_SCANCODE_D) {
-				player.rb->translate(Vector2D(speed, 0));
+		// Render points and connect them
+		for (int i = 0; i < n_points; i++) {
+			if (i + 1 != n_points) {
+				connect(renderer, vertex[i], vertex[i + 1], C_BLUE);
 			}
+			point(renderer, vertex[i], C_RED);
 		}
-			
-
-		if (player.rb->is_line_colliding(Vector2D(0, W_H), Vector2D(W_W, W_H))) {
-			player.set_pos(Vector2D(player.get_pos().x, W_H - player.get_width()));
-		}
-
-		player.render();
 
 		// Cap FPS
 		cap(start, MAX_FPS, true, renderer, roboto);
